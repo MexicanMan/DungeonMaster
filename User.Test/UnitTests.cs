@@ -14,7 +14,7 @@ namespace User.Test
 {
     public class UnitTests
     {
-        private UsersService service;
+        private UsersService userService;
 
         public UnitTests()
         {
@@ -31,13 +31,13 @@ namespace User.Test
             var appSettingsOptions = Options.Create(new AppSettings() { MaxPlayerHP = 3 });
             var jwtIssuerOptions = Options.Create(new JwtIssuerOptions() { Issuer = "api", Audience = "http://localhost:5000" });
 
-            service = new UsersService(mgr, appSettingsOptions, jwtIssuerOptions, null);
+            userService = new UsersService(mgr, appSettingsOptions, jwtIssuerOptions, null);
         }
 
         [Fact]
         public async void GetUserByIdTest()
         {
-            var result = await service.GetUserById("1");
+            var result = await userService.GetUserById("1");
 
             Assert.NotNull(result);
             Assert.Equal("1", result.Id);
