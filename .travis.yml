@@ -3,8 +3,8 @@ mono: none
 dotnet: 3.0.0
 
 install:
- - dotnet restore
- 
- script:
+- dotnet restore
+
+script:
 - dotnet build
 - dotnet test User.Test/User.Test.csproj
