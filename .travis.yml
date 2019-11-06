@@ -10,5 +10,4 @@ script:
 - dotnet test User.Test/User.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
 after_script:
-- dotnet tool install coveralls.net --version 1.0.0 --tool-path tools
-- ./tools/csmacnz.Coveralls --repoToken $COVERALLS_REPO_TOKEN --opencover -i User.Test/coverage.xml --useRelativePaths
+- bash <(curl -s https://codecov.io/bash)
