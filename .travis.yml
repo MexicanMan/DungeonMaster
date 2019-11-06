@@ -7,4 +7,8 @@ install:
 
 script:
 - dotnet build
-- dotnet test User.Test/User.Test.csproj
+- dotnet test User.Test/User.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+
+after_script:
+- dotnet tool install -g coveralls.net --version 1.0.0
+- csmacnz.Coveralls --opencover -i User.Test/coverage.xml --useRelativePaths
