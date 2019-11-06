@@ -11,4 +11,4 @@ script:
 
 after_script:
 - dotnet tool install -g coveralls.net --version 1.0.0
-- csmacnz.Coveralls --repoToken $env:COVERALLS_REPO_TOKEN --opencover -i User.Test/coverage.xml --useRelativePaths
+- csmacnz.Coveralls --repoToken $COVERALLS_REPO_TOKEN --opencover -i User.Test/coverage.xml --useRelativePaths
