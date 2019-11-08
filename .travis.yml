@@ -8,6 +8,8 @@ install:
 script:
 - dotnet build
 - dotnet test User.Test/User.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+- dotnet test Room.Test/Room.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+- dotnet test Monster.Test/Monster.Test.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
 
 after_script:
 - bash <(curl -s https://codecov.io/bash)
