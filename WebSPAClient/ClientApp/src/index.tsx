@@ -3,11 +3,14 @@ import 'bootstrap/dist/css/bootstrap.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import configureStore from './store/configureStore';
 import App from './App';
+import Auth from './components/menu/Auth';
 import registerServiceWorker from './registerServiceWorker';
+import FetchData from './components/FetchData';
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
@@ -19,7 +22,11 @@ const store = configureStore(history);
 ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
-            <App />
+            <Switch>
+                <Route exact path="/" component={App} />
+                <Route path="/auth" component={Auth} />
+                <Route path="/w" component={FetchData} />
+            </Switch>
         </ConnectedRouter>
     </Provider>,
     document.getElementById('root'));

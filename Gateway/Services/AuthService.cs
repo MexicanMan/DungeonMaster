@@ -1,4 +1,5 @@
 ﻿using Gateway.Exceptions;
+using Gateway.Models;
 using Gateway.Services.Clients;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,13 @@ namespace Gateway.Services
             _usersClient = usersClient;
         }
 
-        public async Task<string> Login(string username, string pwd)
+        public async Task<AuthResponse> Login(string username, string pwd)
         {
             // To-Do death check - 403 return
             return await _usersClient.PostAuth(username, pwd);
         }
 
-        public async Task<string> RegisterAndLogin(string username, string pwd)
+        public async Task<AuthResponse> RegisterAndLogin(string username, string pwd)
         {
             await _usersClient.PostRegister(username, pwd);
             return await _usersClient.PostAuth(username, pwd);

@@ -52,7 +52,7 @@ namespace Gateway.Services.Clients
                     $"Code {resp.StatusCode} with {content}.");
         }
 
-        public async Task<string> PostAuth(string username, string pwd)
+        public async Task<AuthResponse> PostAuth(string username, string pwd)
         {
             string stringPayload = await Task.Run(() => JsonConvert.SerializeObject(new Login
             {
@@ -66,7 +66,7 @@ namespace Gateway.Services.Clients
             string content = await resp.Content.ReadAsStringAsync();
 
             if (resp.IsSuccessStatusCode)
-                return content;
+                return JsonConvert.DeserializeObject<AuthResponse>(content);
             else if (resp.StatusCode == HttpStatusCode.BadRequest)
                 throw new AuthException(content);
             else

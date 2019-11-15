@@ -20,6 +20,29 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="ClientApp\src\appconfig.ts" />
+    <None Remove="ClientApp\src\components\BaseWindow.tsx" />
+    <None Remove="ClientApp\src\components\helpers\Loader.tsx" />
+    <None Remove="ClientApp\src\components\menu\Auth.tsx" />
+    <None Remove="ClientApp\src\store\actionTypes.ts" />
+    <None Remove="ClientApp\src\store\menu\AuthReducer.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\appconfig.ts" />
+    <TypeScriptCompile Include="ClientApp\src\components\helpers\Loader.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\menu\BaseWindow.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\menu\Auth.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\store\actionTypes.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\menu\AuthReducer.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\components\game\" />
+    <Folder Include="ClientApp\src\store\game\" />
+  </ItemGroup>
+
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
     <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">

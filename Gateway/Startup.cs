@@ -61,6 +61,8 @@ namespace Gateway
                 options.AddPolicy("Player", policy => policy.RequireClaim("Player"));
             });
 
+            services.AddCors();
+
             services.AddControllers();
 
             services.AddTransient<IGameService, GameService>();
@@ -75,9 +77,14 @@ namespace Gateway
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseAuthentication();
             app.UseAuthorization();

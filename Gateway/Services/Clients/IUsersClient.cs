@@ -10,7 +10,7 @@ namespace Gateway.Services.Clients
     {
         Task<bool> GetTokenCorrectness(string token);
         Task<Player> PostRegister(string username, string pwd);
-        Task<string> PostAuth(string username, string pwd);
+        Task<AuthResponse> PostAuth(string username, string pwd);
         Task<Player> GetPlayerById(string id);
         Task<Player> PatchRoomChange(string id, int roomId);
         Task<Player> PatchPickupTreasure(string id);
