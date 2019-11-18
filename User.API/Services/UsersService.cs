@@ -29,13 +29,13 @@ namespace User.API.Services
             _jwtFactory = jwtFactory;
         }
 
-        public async Task<string> Auth(string username, string pwd)
+        public async Task<AuthResponse> Auth(string username, string pwd)
         {
             var identity = await GetClaimsIdentity(username, pwd);
             if (identity == null)
                 throw new AuthException("Invalid username or password!");
 
-            string jwt = await JwtGenerator.GenerateJwt(identity, _jwtFactory, username, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
+            AuthResponse jwt = await JwtGenerator.GenerateJwt(identity, _jwtFactory, username, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
 
             return jwt;
         }

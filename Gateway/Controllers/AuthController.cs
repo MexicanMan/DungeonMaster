@@ -6,14 +6,18 @@ using Gateway.Exceptions;
 using Gateway.Models;
 using Gateway.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Gateway.Controllers
 {
     [Route("api/auth")]
+    [EnableCors]
+    [Produces("application/json")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -29,17 +33,17 @@ namespace Gateway.Controllers
         {
             try
             {
-                string resp = await _authService.Login(data.Username, data.Password);
+                var resp = await _authService.Login(data.Username, data.Password);
 
                 return Ok(resp);
             }
             catch (AuthException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
 
@@ -48,21 +52,21 @@ namespace Gateway.Controllers
         {
             try
             {
-                string authResp = await _authService.RegisterAndLogin(data.Username, data.Password);
+                var authResp = await _authService.RegisterAndLogin(data.Username, data.Password);
 
                 return Ok(authResp);
             }
             catch(AuthException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (RegistrationException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
     }
