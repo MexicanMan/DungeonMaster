@@ -1,10 +1,13 @@
 ﻿import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
 
 import './Loader.css';
+import { ApplicationState } from '../../store';
+import * as LoaderStore from '../../store/helpers/LoaderReducer';
 
-type LoaderProps = {
-    loading: boolean;
-}
+type LoaderProps =
+    LoaderStore.LoaderState;
 
 class Loader extends Component<LoaderProps> {
     constructor(props: LoaderProps) {
@@ -36,4 +39,10 @@ class Loader extends Component<LoaderProps> {
     }
 }
 
-export default Loader;
+function mapStateToProps(state: ApplicationState) {
+    return {
+        ...state.loader,
+    };
+}
+
+export default connect(mapStateToProps) (Loader as any);

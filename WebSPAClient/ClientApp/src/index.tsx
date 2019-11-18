@@ -11,6 +11,8 @@ import App from './App';
 import Auth from './components/menu/Auth';
 import registerServiceWorker from './registerServiceWorker';
 import FetchData from './components/FetchData';
+import Counter from './components/Counter';
+import * as Path from './routes';
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
@@ -24,8 +26,8 @@ ReactDOM.render(
         <ConnectedRouter history={history}>
             <Switch>
                 <Route exact path="/" component={App} />
-                <Route path="/auth" component={Auth} />
-                <Route path="/w" component={FetchData} />
+                <Route path={Path.AUTH} component={Auth} />
+                <Route path={Path.MAIN_MENU} component={Counter} />
             </Switch>
         </ConnectedRouter>
     </Provider>,

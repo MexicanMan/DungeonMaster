@@ -36,11 +36,11 @@ namespace Gateway.Controllers
             }
             catch (WrongInputDataException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
 
@@ -57,11 +57,11 @@ namespace Gateway.Controllers
             }
             catch (WrongInputDataException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
 
@@ -78,19 +78,19 @@ namespace Gateway.Controllers
             }
             catch (WrongInputDataException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (NullReferenceException e)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, e.Message);
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
             }
             catch (PermissionsDeniedException e)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, e.Message);
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
 
@@ -107,19 +107,19 @@ namespace Gateway.Controllers
             }
             catch (WrongInputDataException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (NullReferenceException e)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, e.Message);
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
             }
             catch (PermissionsDeniedException e)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, e.Message);
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
 
@@ -136,23 +136,23 @@ namespace Gateway.Controllers
             }
             catch (WrongInputDataException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (NullReferenceException e)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, e.Message);
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
             }
             catch (WrongDirectionException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (PermissionsDeniedException e)
             {
-                return StatusCode(StatusCodes.Status403Forbidden, e.Message);
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
 
@@ -167,7 +167,7 @@ namespace Gateway.Controllers
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
     }

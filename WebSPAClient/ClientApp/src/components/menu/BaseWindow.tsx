@@ -1,4 +1,5 @@
 ﻿import React, { PureComponent } from 'react';
+import Loader from '../helpers/Loader';
 
 type BaseWindowProps = { header: string };
 
@@ -19,6 +20,7 @@ class BaseWindow extends PureComponent<BaseWindowProps> {
                     </div>
                     <div className="col-sm-4"></div>
                 </div>
+                <Loader />
             </div>
         );
     }

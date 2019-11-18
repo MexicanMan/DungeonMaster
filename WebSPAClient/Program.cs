@@ -19,6 +19,7 @@ namespace WebSPAClient
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseUrls("https://*:8081")
                 .UseStartup<Startup>();
     }
 }

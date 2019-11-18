@@ -34,16 +34,16 @@ namespace Gateway.Controllers
             try
             {
                 var resp = await _authService.Login(data.Username, data.Password);
-                //return new ContentResult() { Content = resp, ContentType = "application/json", StatusCode = StatusCodes.Status200OK };
+
                 return Ok(resp);
             }
             catch (AuthException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
 
@@ -58,15 +58,15 @@ namespace Gateway.Controllers
             }
             catch(AuthException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (RegistrationException e)
             {
-                return BadRequest(e.Message);
+                return BadRequest(new ErrorResponse() { Error = e.Message });
             }
             catch (InternalException e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
             }
         }
     }
