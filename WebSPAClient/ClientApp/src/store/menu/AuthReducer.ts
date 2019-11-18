@@ -78,6 +78,7 @@ export const actionCreators = {
             .then(data => {
                 sessionStorage.setItem('auth_token', data.auth_token);
                 sessionStorage.setItem('id', data.id);
+                sessionStorage.setItem('username', username);
                 dispatch({ type: AUTH_SUCCESS });
                 dispatch(loaderActionCreators.response());
                 dispatch(actionCreators.moveToMainMenu());

@@ -13,6 +13,7 @@ import registerServiceWorker from './registerServiceWorker';
 import FetchData from './components/FetchData';
 import Counter from './components/Counter';
 import * as Path from './routes';
+import MainMenu from './components/menu/MainMenu';
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
@@ -27,7 +28,9 @@ ReactDOM.render(
             <Switch>
                 <Route exact path="/" component={App} />
                 <Route path={Path.AUTH} component={Auth} />
-                <Route path={Path.MAIN_MENU} component={Counter} />
+                <Route path={Path.MAIN_MENU} component={MainMenu} />
+                <Route path={Path.GAME} component={Counter} />
+                <Route path={Path.LEADERBOARD} component={Counter} />
             </Switch>
         </ConnectedRouter>
     </Provider>,

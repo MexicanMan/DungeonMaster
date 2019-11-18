@@ -28,6 +28,7 @@ exports.actionCreators = {
             .then(function (data) {
             sessionStorage.setItem('auth_token', data.auth_token);
             sessionStorage.setItem('id', data.id);
+            sessionStorage.setItem('username', username);
             dispatch({ type: actionTypes_1.AUTH_SUCCESS });
             dispatch(LoaderReducer_1.actionCreators.response());
             dispatch(exports.actionCreators.moveToMainMenu());
