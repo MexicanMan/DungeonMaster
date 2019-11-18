@@ -7,5 +7,15 @@ import { push } from 'connected-react-router';
 import * as Path from '../../routes';
 
 export const actionCreators = {
-    moveToGame: () => (dispatch: Dispatch) => { dispatch(push(Path.MAIN_MENU)); },
+    moveToGame: () => (dispatch: Dispatch) => {
+        dispatch(push(Path.GAME));
+    },
+
+    moveToLeaderboard: () => (dispatch: Dispatch) => {
+        dispatch(push(Path.LEADERBOARD));
+    },
+
+    exit: () => (dispatch: Dispatch) => {
+        dispatch(push("/"));
+    },
 };

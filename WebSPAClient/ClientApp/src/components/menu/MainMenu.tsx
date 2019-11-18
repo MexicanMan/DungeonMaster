@@ -26,11 +26,11 @@ class MainMenu extends Component<MainMenuProps> {
     }
 
     openLeaderboard() {
-
+        this.props.moveToLeaderboard();
     }
 
     exit() {
-
+        this.props.exit();
     }
 
     render() {
