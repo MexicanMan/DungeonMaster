@@ -4,7 +4,7 @@ import { GATEWAY_ADDR } from '../../appconfig';
 //import { } from '../actionTypes';
 import { actionCreators as loaderActionCreators } from '../helpers/LoaderReducer';
 import { push } from 'connected-react-router';
-import * as Path from '../../routes';
+import * as Path from '../../routes/routes';
 
 export const actionCreators = {
     moveToGame: () => (dispatch: Dispatch) => {
@@ -16,6 +16,10 @@ export const actionCreators = {
     },
 
     exit: () => (dispatch: Dispatch) => {
+        sessionStorage.removeItem("id");
+        sessionStorage.removeItem("auth_token");
+        sessionStorage.removeItem("username");
+
         dispatch(push("/"));
     },
 };

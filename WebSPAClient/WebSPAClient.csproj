@@ -27,7 +27,9 @@
     <None Remove="ClientApp\src\components\helpers\ModalWindow.tsx" />
     <None Remove="ClientApp\src\components\menu\Auth.tsx" />
     <None Remove="ClientApp\src\components\menu\MainMenu.tsx" />
+    <None Remove="ClientApp\src\PrivateRoute.tsx" />
     <None Remove="ClientApp\src\routes.ts" />
+    <None Remove="ClientApp\src\routes\PublicRoute.tsx" />
     <None Remove="ClientApp\src\store\actionTypes.ts" />
     <None Remove="ClientApp\src\store\helpers\ErrorResponse.ts" />
     <None Remove="ClientApp\src\store\helpers\LoaderReducer.ts" />
@@ -42,7 +44,11 @@
     <TypeScriptCompile Include="ClientApp\src\components\menu\BaseWindow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\menu\Auth.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\menu\MainMenu.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\routes.ts" />
+    <TypeScriptCompile Include="ClientApp\src\routes\PublicRoute.tsx">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="ClientApp\src\routes\PrivateRoute.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\routes\routes.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\actionTypes.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\helpers\ErrorResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\helpers\LoaderReducer.ts" />

@@ -1,9 +1,6 @@
 ﻿import React, {Component, ChangeEvent, FormEvent } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-//import { withRouter } from 'react-router-dom';
-//import * as authActions from '../../actions/authActions.jsx';
-//import * as paths from '../../routes/Paths.js';
 import BaseWindow from './BaseWindow';
 import * as AuthReducer from '../../store/menu/AuthReducer';
 import { ApplicationState } from '../../store';

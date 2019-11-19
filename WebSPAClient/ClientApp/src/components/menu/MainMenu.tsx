@@ -1,18 +1,12 @@
-﻿import React, { Component, ChangeEvent, FormEvent } from 'react';
+﻿import React, { PureComponent } from 'react';
 import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
-//import { withRouter } from 'react-router-dom';
-//import * as authActions from '../../actions/authActions.jsx';
-//import * as paths from '../../routes/Paths.js';
 import BaseWindow from './BaseWindow';
 import * as MainMenuReducer from '../../store/menu/MainMenuReducer';
-import { ApplicationState } from '../../store';
-import { RouteComponentProps, withRouter } from 'react-router';
-import ModalWindow from '../helpers/ModalWindow';
 
 type MainMenuProps = typeof MainMenuReducer.actionCreators;
 
-class MainMenu extends Component<MainMenuProps> {
+class MainMenu extends PureComponent<MainMenuProps> {
     constructor(props: MainMenuProps) {
         super(props);
 
