@@ -10,9 +10,11 @@ import configureStore from './store/configureStore';
 import App from './App';
 import Auth from './components/menu/Auth';
 import registerServiceWorker from './registerServiceWorker';
-import FetchData from './components/FetchData';
 import Counter from './components/Counter';
-import * as Path from './routes';
+import * as Path from './routes/routes';
+import MainMenu from './components/menu/MainMenu';
+import PrivateRoute from './routes/PrivateRoute';
+import PublicRoute from './routes/PublicRoute';
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
@@ -25,9 +27,11 @@ ReactDOM.render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
             <Switch>
-                <Route exact path="/" component={App} />
-                <Route path={Path.AUTH} component={Auth} />
-                <Route path={Path.MAIN_MENU} component={Counter} />
+                <PublicRoute exact path="/" component={App} />
+                <PublicRoute path={Path.AUTH} component={Auth} />
+                <PrivateRoute path={Path.MAIN_MENU} component={MainMenu} />
+                <PrivateRoute path={Path.GAME} component={Counter} />
+                <PrivateRoute path={Path.LEADERBOARD} component={Counter} />
             </Switch>
         </ConnectedRouter>
     </Provider>,

@@ -5,7 +5,7 @@ import { AUTH_SUCCESS, AUTH_ERROR_CLEAN, AUTH_REGISTERED_CLEAN, AUTH_FAILED, AUT
 import { actionCreators as loaderActionCreators } from '../helpers/LoaderReducer';
 import ErrorResponse from '../helpers/ErrorResponse';
 import { push } from 'connected-react-router';
-import * as Path from '../../routes';
+import * as Path from '../../routes/routes';
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
@@ -54,6 +54,12 @@ interface AuthResponse {
     expires_in: number;
 }
 
+function setSessionItems(auth_token: string, id: string, username: string) {
+    sessionStorage.setItem('auth_token', auth_token);
+    sessionStorage.setItem('id', id);
+    sessionStorage.setItem('username', username);
+}
+
 export const actionCreators = {
     requestAuth: (username: string, pwd: string): AppThunkAction<any> => (dispatch) => {
         dispatch(loaderActionCreators.request());
@@ -69,28 +75,28 @@ export const actionCreators = {
                 password: pwd
             })
         })
-            .then(response => {
-                if (response.ok)
-                    return response.json() as Promise<AuthResponse>;
-                else
-                    throw(response.json() as Promise<ErrorResponse>);
-            })
-            .then(data => {
-                sessionStorage.setItem('auth_token', data.auth_token);
-                sessionStorage.setItem('id', data.id);
-                dispatch({ type: AUTH_SUCCESS });
-                dispatch(loaderActionCreators.response());
-                dispatch(actionCreators.moveToMainMenu());
-            })
-            .catch((error: Promise<ErrorResponse>) => {
-                error.then(error => {
-                    dispatch(actionCreators.authFailed(error.error))
-                    dispatch(loaderActionCreators.response())
-                });
-            })
-            .catch(error => {
-                console.log(error);
+        .then(response => {
+            if (response.ok)
+                return response.json() as Promise<AuthResponse>;
+            else
+                throw(response.json() as Promise<ErrorResponse>);
+        })
+        .then(data => {
+            setSessionItems(data.auth_token, data.id, username);
+
+            dispatch({ type: AUTH_SUCCESS });
+            dispatch(loaderActionCreators.response());
+            dispatch(actionCreators.moveToMainMenu());
+        })
+        .catch((error: Promise<ErrorResponse>) => {
+            error.then(error => {
+                dispatch(actionCreators.authFailed(error.error))
+                dispatch(loaderActionCreators.response())
             });
+        })
+        .catch(error => {
+            console.log(error);
+        });
     },
 
     requestReg: (username: string, pwd: string): AppThunkAction<any> => (dispatch) => {
@@ -107,27 +113,27 @@ export const actionCreators = {
                 password: pwd
             })
         })
-            .then(response => {
-                if (response.ok)
-                    return response.json() as Promise<AuthResponse>;
-                else
-                    throw (response.json() as Promise<ErrorResponse>);
-            })
-            .then(data => {
-                sessionStorage.setItem('auth_token', data.auth_token);
-                sessionStorage.setItem('id', data.id);
-                dispatch({ type: AUTH_REG_SUCCESS });
-                dispatch(loaderActionCreators.response());
-            })
-            .catch((error: Promise<ErrorResponse>) => {
-                error.then(error => {
-                    dispatch(actionCreators.authFailed(error.error))
-                    dispatch(loaderActionCreators.response())
-                });
-            })
-            .catch(error => {
-                console.log(error);
+        .then(response => {
+            if (response.ok)
+                return response.json() as Promise<AuthResponse>;
+            else
+                throw (response.json() as Promise<ErrorResponse>);
+        })
+        .then(data => {
+            setSessionItems(data.auth_token, data.id, username);
+
+            dispatch({ type: AUTH_REG_SUCCESS });
+            dispatch(loaderActionCreators.response());
+        })
+        .catch((error: Promise<ErrorResponse>) => {
+            error.then(error => {
+                dispatch(actionCreators.authFailed(error.error))
+                dispatch(loaderActionCreators.response())
             });
+        })
+        .catch(error => {
+            console.log(error);
+        });
     },
 
     moveToMainMenu: () => (dispatch: Dispatch) => { dispatch(push(Path.MAIN_MENU)); },
