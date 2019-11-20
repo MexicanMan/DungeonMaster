@@ -36,7 +36,7 @@ class MainMenu extends PureComponent<MainMenuProps> {
                 </div>
                 <div className="row mb-3 justify-content-center">
                     <button type="button" className="btn btn-success w-50" onClick={() => this.enterGame()}>
-                        Enter game
+                        To the dungeon
                     </button>
                 </div>
                 <div className="row mb-3 justify-content-center">

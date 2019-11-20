@@ -1,0 +1,13 @@
+﻿export const EMPTY = 0;
+export const WALL = 1;
+export const PLAYER = 2;
+export const MONSTER = 3;
+export const TREASURE = 4;
+export const EAST_CLOSED = 11;
+export const EAST_OPENED = 21;
+export const WEST_CLOSED = 12;
+export const WEST_OPENED = 22;
+export const NORTH_CLOSED = 13;
+export const NORTH_OPENED = 23;
+export const SOUTH_CLOSED = 14;
+export const SOUTH_OPENED = 24;
