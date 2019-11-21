@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var WeatherForecasts = require("./WeatherForecasts");
 var Counter = require("./Counter");
 var Auth = require("./menu/AuthReducer");
+var Leaderboard = require("./menu/LeaderboardReducer");
 var Loader = require("./helpers/LoaderReducer");
 var Game = require("./game/GameReducer");
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -13,6 +14,7 @@ exports.reducers = {
     weatherForecasts: WeatherForecasts.reducer,
     auth: Auth.authReducer,
     loader: Loader.loaderReducer,
-    game: Game.gameReducer
+    game: Game.gameReducer,
+    leaderboard: Leaderboard.leaderboardReducer
 };
 //# sourceMappingURL=index.js.map
