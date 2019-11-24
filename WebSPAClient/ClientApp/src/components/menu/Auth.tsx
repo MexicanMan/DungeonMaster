@@ -1,10 +1,9 @@
 ﻿import React, {Component, ChangeEvent, FormEvent } from 'react';
-import { bindActionCreators, Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import BaseWindow from './BaseWindow';
 import * as AuthReducer from '../../store/menu/AuthReducer';
 import { ApplicationState } from '../../store';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { RouteComponentProps } from 'react-router';
 import ModalWindow from '../helpers/ModalWindow';
 
 type AuthProps =
