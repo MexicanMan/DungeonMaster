@@ -2,26 +2,29 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var appconfig_1 = require("../../appconfig");
 var LoaderReducer_1 = require("../helpers/LoaderReducer");
-var connected_react_router_1 = require("connected-react-router");
-var Path = require("../../routes/routes");
-function setSessionItems(auth_token, id, username) {
-    sessionStorage.setItem('auth_token', auth_token);
-    sessionStorage.setItem('id', id);
-    sessionStorage.setItem('username', username);
+var FieldReducer_1 = require("./FieldReducer");
+var ControllerReducer_1 = require("./ControllerReducer");
+function GameDataUpdate(dispatch, data, playerTo) {
+    var room = data.room;
+    dispatch(FieldReducer_1.actionCreators.roomUpdate(room.treasure, room.northRoom, room.southRoom, room.eastRoom, room.westRoom, room.northRoomId, room.southRoomId, room.eastRoomId, room.westRoomId, room.monsterId, playerTo));
+    dispatch(ControllerReducer_1.actionCreators.controllerUpdate(room.treasure, room.northRoom, room.southRoom, room.eastRoom, room.westRoom, room.monsterId));
+    var player = data.player;
+    dispatch(FieldReducer_1.actionCreators.playerUpdate(player.currentHP, player.maxHP));
+    var monster = data.monster;
+    if (monster != undefined)
+        dispatch(FieldReducer_1.actionCreators.monsterUpdate(monster.currentHP, monster.maxHP, monster.type));
+    else
+        dispatch(FieldReducer_1.actionCreators.monsterUpdate(undefined, undefined, undefined));
 }
 exports.actionCreators = {
-    requestAuth: function (username, pwd) { return function (dispatch) {
+    requestEnterGame: function () { return function (dispatch) {
         dispatch(LoaderReducer_1.actionCreators.request());
-        fetch(appconfig_1.GATEWAY_ADDR + "/api/auth/", {
-            method: 'POST',
+        fetch("" + appconfig_1.GATEWAY_ADDR + appconfig_1.GAME_CONTROL_ADDR + "/room", {
+            method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: pwd
-            })
+                'Authorization': "Bearer " + sessionStorage.getItem("auth_token")
+            }
         })
             .then(function (response) {
             if (response.ok)
@@ -30,40 +33,7 @@ exports.actionCreators = {
                 throw response.json();
         })
             .then(function (data) {
-            setSessionItems(data.auth_token, data.id, username);
-            dispatch(LoaderReducer_1.actionCreators.response());
-            dispatch(exports.actionCreators.moveToMainMenu());
-        })
-            .catch(function (error) {
-            error.then(function (error) {
-                dispatch(LoaderReducer_1.actionCreators.response());
-            });
-        })
-            .catch(function (error) {
-            console.log(error);
-        });
-    }; },
-    requestReg: function (username, pwd) { return function (dispatch) {
-        dispatch(LoaderReducer_1.actionCreators.request());
-        fetch(appconfig_1.GATEWAY_ADDR + "/api/auth/reg/", {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: pwd
-            })
-        })
-            .then(function (response) {
-            if (response.ok)
-                return response.json();
-            else
-                throw response.json();
-        })
-            .then(function (data) {
-            setSessionItems(data.auth_token, data.id, username);
+            GameDataUpdate(dispatch, data);
             dispatch(LoaderReducer_1.actionCreators.response());
         })
             .catch(function (error) {
@@ -75,13 +45,47 @@ exports.actionCreators = {
             console.log(error);
         });
     }; },
-    moveToMainMenu: function () { return function (dispatch) { dispatch(connected_react_router_1.push(Path.MAIN_MENU)); }; },
+    gamePatchRequest: function (action, bodyDirection) { return function (dispatch) {
+        dispatch(LoaderReducer_1.actionCreators.request());
+        fetch("" + appconfig_1.GATEWAY_ADDR + appconfig_1.GAME_CONTROL_ADDR + "/" + action, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': "Bearer " + sessionStorage.getItem("auth_token")
+            },
+            body: bodyDirection == undefined ? null : JSON.stringify({
+                toDir: bodyDirection
+            })
+        })
+            .then(function (response) {
+            if (response.ok)
+                return response.json();
+            else
+                throw response.json();
+        })
+            .then(function (data) {
+            GameDataUpdate(dispatch, data, bodyDirection);
+            dispatch(LoaderReducer_1.actionCreators.response());
+        })
+            .catch(function (error) {
+            error.then(function (error) {
+                dispatch(LoaderReducer_1.actionCreators.response());
+            });
+        })
+            .catch(function (error) {
+            console.log(error);
+        });
+    }; },
+    cleanGameStates: function () { return function (dispatch) {
+        dispatch(FieldReducer_1.actionCreators.cleanState());
+        dispatch(ControllerReducer_1.actionCreators.cleanState());
+    }; }
 };
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 var initialState = {
-    error: '',
-    isNewRegistered: false
+    field: FieldReducer_1.initialState,
 };
 exports.gameReducer = function (state, incomingAction) {
     /*const action = incomingAction as KnownAction;

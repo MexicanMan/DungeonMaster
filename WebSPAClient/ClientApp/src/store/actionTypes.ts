@@ -6,3 +6,11 @@ export const AUTH_FAILED = "AUTH_FAILED";
 
 export const REQUEST = "REQUEST";
 export const REQUEST_RESPONSE = "REQUEST_RESPONSE";
+
+export const ROOM_UPDATE = "ROOM_UPDATE";
+export const PLAYER_UPDATE = "PLAYER_UPDATE";
+export const MONSTER_UPDATE = "MONSTER_UPDATE";
+export const FIELD_CLEAN = "FIELD_CLEAN";
+
+export const CONTROLLER_UPDATE = "CONTROLLER_UPDATE";
+export const CONTROLLER_CLEAN = "CONTROLLER_CLEAN";
