@@ -1,18 +1,21 @@
 ﻿import { Action, Reducer, Dispatch } from 'redux';
 import { AppThunkAction } from '../';
-import { GATEWAY_ADDR } from '../../appconfig';
+import { GATEWAY_ADDR, GAME_CONTROL_ADDR } from '../../appconfig';
 import {  } from '../actionTypes';
 import { actionCreators as loaderActionCreators } from '../helpers/LoaderReducer';
 import ErrorResponse from '../helpers/ErrorResponse';
 import { push } from 'connected-react-router';
 import * as Path from '../../routes/routes';
+import { FieldState, actionCreators as fieldActionCreators, initialState as FieldInitialState } from './FieldReducer';
+import { actionCreators as controllerActionCreators } from './ControllerReducer';
+import { MonsterTypes } from '../helpers/MonsterTypes';
+import { Directions } from '../helpers/Directions';
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
 
 export interface GameState {
-    error: string;
-    isNewRegistered: boolean;
+    field: FieldState | undefined,
 }
 
 // -----------------
@@ -31,77 +34,79 @@ export interface GameState {
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
 // They don't directly mutate state, but they can have external side-effects (such as loading data).
 
-interface AuthResponse {
-    id: string;
-    auth_token: string;
-    expires_in: number;
+interface GameDataResponse {
+    room: Room,
+    player: Player,
+    monster: Monster
 }
 
-function setSessionItems(auth_token: string, id: string, username: string) {
-    sessionStorage.setItem('auth_token', auth_token);
-    sessionStorage.setItem('id', id);
-    sessionStorage.setItem('username', username);
+interface Room {
+    roomId: number,
+    monsterId?: number,
+    treasure: boolean
+    northRoom: boolean,
+    southRoom: boolean,
+    eastRoom: boolean,
+    westRoom: boolean,
+    northRoomId?: number,
+    southRoomId?: number,
+    eastRoomId?: number,
+    westRoomId?: number,
+    discovererId: string
+}
+
+interface Player {
+    id: string,
+    username: string,
+    currentRoomId?: number,
+    maxHP: number,
+    currentHP: number,
+    treasureCount: number
+}
+
+interface Monster {
+    monsterId: number,
+    maxHP: number,
+    currentHP: number,
+    type: MonsterTypes
+}
+
+function GameDataUpdate(dispatch: (action: any) => void, data: GameDataResponse, playerTo?: Directions) {
+    let room = data.room;
+    dispatch(fieldActionCreators.roomUpdate(room.treasure, room.northRoom, room.southRoom, room.eastRoom, room.westRoom,
+        room.northRoomId, room.southRoomId, room.eastRoomId, room.westRoomId, room.monsterId, playerTo));
+    dispatch(controllerActionCreators.controllerUpdate(room.treasure, room.northRoom, room.southRoom, room.eastRoom,
+        room.westRoom, room.monsterId));
+
+    let player = data.player;
+    dispatch(fieldActionCreators.playerUpdate(player.currentHP, player.maxHP));
+
+    let monster = data.monster;
+    if (monster != undefined)
+        dispatch(fieldActionCreators.monsterUpdate(monster.currentHP, monster.maxHP, monster.type));
+    else
+        dispatch(fieldActionCreators.monsterUpdate(undefined, undefined, undefined));
 }
 
 export const actionCreators = {
-    requestAuth: (username: string, pwd: string): AppThunkAction<any> => (dispatch) => {
+    requestEnterGame: (): AppThunkAction<any> => (dispatch) => {
         dispatch(loaderActionCreators.request());
 
-        fetch(`${GATEWAY_ADDR}/api/auth/`, {
-            method: 'POST',
+        fetch(`${GATEWAY_ADDR}${GAME_CONTROL_ADDR}/room`, {
+            method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: pwd
-            })
+                'Authorization': `Bearer ${sessionStorage.getItem("auth_token")}`
+            }
         })
-            .then(response => {
+             .then(response => {
                 if (response.ok)
-                    return response.json() as Promise<AuthResponse>;
+                    return response.json() as Promise<GameDataResponse>;
                 else
                     throw (response.json() as Promise<ErrorResponse>);
             })
             .then(data => {
-                setSessionItems(data.auth_token, data.id, username);
-
-                dispatch(loaderActionCreators.response());
-                dispatch(actionCreators.moveToMainMenu());
-            })
-            .catch((error: Promise<ErrorResponse>) => {
-                error.then(error => {
-                    dispatch(loaderActionCreators.response())
-                });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    },
-
-    requestReg: (username: string, pwd: string): AppThunkAction<any> => (dispatch) => {
-        dispatch(loaderActionCreators.request());
-
-        fetch(`${GATEWAY_ADDR}/api/auth/reg/`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: pwd
-            })
-        })
-            .then(response => {
-                if (response.ok)
-                    return response.json() as Promise<AuthResponse>;
-                else
-                    throw (response.json() as Promise<ErrorResponse>);
-            })
-            .then(data => {
-                setSessionItems(data.auth_token, data.id, username);
+                GameDataUpdate(dispatch, data);
 
                 dispatch(loaderActionCreators.response());
             })
@@ -115,21 +120,52 @@ export const actionCreators = {
             });
     },
 
-    moveToMainMenu: () => (dispatch: Dispatch) => { dispatch(push(Path.MAIN_MENU)); },
+    gamePatchRequest: (action: string, bodyDirection?: Directions): AppThunkAction<any> => (dispatch) => {
+        dispatch(loaderActionCreators.request());
 
-    /*authFailed: (error: string) => ({ type: AUTH_FAILED, error: error } as AuthFailedAction),
+        fetch(`${GATEWAY_ADDR}${GAME_CONTROL_ADDR}/${action}`, {
+            method: 'PATCH',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem("auth_token")}`
+            },
+            body: bodyDirection == undefined ? null : JSON.stringify({
+                toDir: bodyDirection
+            })
+        })
+            .then(response => {
+                if (response.ok)
+                    return response.json() as Promise<GameDataResponse>;
+                else
+                    throw (response.json() as Promise<ErrorResponse>);
+            })
+            .then(data => {
+                GameDataUpdate(dispatch, data, bodyDirection);
 
-    authCleanError: () => ({ type: AUTH_ERROR_CLEAN } as AuthCleanErrorAction),
+                dispatch(loaderActionCreators.response());
+            })
+            .catch((error: Promise<ErrorResponse>) => {
+                error.then(error => {
+                    dispatch(loaderActionCreators.response())
+                });
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    },
 
-    authCleanReg: () => ({ type: AUTH_REGISTERED_CLEAN } as AuthCleanRegAction),*/
+    cleanGameStates: () => (dispatch: Dispatch) => {
+        dispatch(fieldActionCreators.cleanState());
+        dispatch(controllerActionCreators.cleanState());
+    }
 };
 
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 
 const initialState: GameState = {
-    error: '',
-    isNewRegistered: false
+    field: FieldInitialState,
 };
 
 export const gameReducer: Reducer<GameState> = (state: GameState = initialState, incomingAction: Action): GameState => {

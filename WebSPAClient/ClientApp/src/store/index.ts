@@ -4,6 +4,8 @@ import * as Auth from './menu/AuthReducer';
 import * as Leaderboard from './menu/LeaderboardReducer';
 import * as Loader from './helpers/LoaderReducer';
 import * as Game from './game/GameReducer';
+import * as Field from './game/FieldReducer';
+import * as Controller from './game/ControllerReducer';
 
 // The top-level state object
 export interface ApplicationState {
@@ -12,6 +14,8 @@ export interface ApplicationState {
     auth: Auth.AuthState | undefined;
     loader: Loader.LoaderState | undefined;
     game: Game.GameState | undefined;
+    field: Field.FieldState | undefined;
+    controller: Controller.ControllerState | undefined;
     leaderboard: Leaderboard.LeaderboardState | undefined;
 }
 
@@ -24,6 +28,8 @@ export const reducers = {
     auth: Auth.authReducer,
     loader: Loader.loaderReducer,
     game: Game.gameReducer,
+    field: Field.fieldReducer,
+    controller: Controller.controllerReducer,
     leaderboard: Leaderboard.leaderboardReducer
 };
 
