@@ -10,7 +10,6 @@ import configureStore from './store/configureStore';
 import App from './App';
 import Auth from './components/menu/Auth';
 import registerServiceWorker from './registerServiceWorker';
-import Counter from './components/Counter';
 import * as Path from './routes/routes';
 import MainMenu from './components/menu/MainMenu';
 import PrivateRoute from './routes/PrivateRoute';
