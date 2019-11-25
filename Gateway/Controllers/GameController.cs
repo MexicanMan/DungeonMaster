@@ -163,7 +163,7 @@ namespace Gateway.Controllers
             {
                 IEnumerable<LeaderboardUser> leaderboardPage = await _gameService.GetLeaderboard(page);
 
-                return Ok(leaderboardPage);
+                return Ok(new LeaderboardModel() { Players = leaderboardPage });
             }
             catch (InternalException e)
             {

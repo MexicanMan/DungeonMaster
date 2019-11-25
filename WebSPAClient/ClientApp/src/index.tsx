@@ -32,8 +32,8 @@ ReactDOM.render(
                 <PublicRoute exact path="/" component={App} />
                 <PublicRoute path={Path.AUTH} component={Auth} />
                 <PrivateRoute path={Path.MAIN_MENU} component={MainMenu} />
-                <Route path={Path.GAME} component={Game} />
-                <Route path={Path.LEADERBOARD} component={Leaderboard} />
+                <PrivateRoute path={Path.GAME} component={Game} />
+                <PrivateRoute path={Path.LEADERBOARD} component={Leaderboard} />
             </Switch>
         </ConnectedRouter>
     </Provider>,

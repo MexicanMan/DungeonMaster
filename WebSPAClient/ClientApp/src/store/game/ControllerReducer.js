@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var actionTypes_1 = require("../actionTypes");
 var GameReducer_1 = require("./GameReducer");
@@ -24,6 +35,9 @@ exports.actionCreators = {
     monsterAtk: function () { return function (dispatch) { dispatch(GameReducer_1.actionCreators.gamePatchRequest('monster')); }; },
     treasurePkp: function () { return function (dispatch) { dispatch(GameReducer_1.actionCreators.gamePatchRequest('treasure')); }; },
     moveToRoom: function (toDir) { return function (dispatch) { dispatch(GameReducer_1.actionCreators.gamePatchRequest('room', toDir)); }; },
+    changeLeaderboardModal: function (isOpened) { return ({
+        type: actionTypes_1.CHANGE_LEADERBOARD_MODAL, isLeaderboardOpened: isOpened
+    }); },
 };
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
@@ -33,26 +47,31 @@ exports.initialState = {
     isDownActive: false,
     isUpActive: false,
     isMonsterActive: false,
-    isTreasureActive: false
+    isTreasureActive: false,
+    isLeaderboardOpened: false
 };
 exports.controllerReducer = function (state, incomingAction) {
     if (state === void 0) { state = exports.initialState; }
+    console.log(incomingAction);
     var knownAction = incomingAction;
     switch (knownAction.type) {
         case actionTypes_1.CONTROLLER_UPDATE: {
-            var action = knownAction;
-            console.log(action);
+            var action_1 = knownAction;
             return {
-                isRightActive: action.isRightActive,
-                isLeftActive: action.isLeftActive,
-                isDownActive: action.isDownActive,
-                isUpActive: action.isUpActive,
-                isMonsterActive: action.isMonsterActive,
-                isTreasureActive: action.isTreasureActive
+                isRightActive: action_1.isRightActive,
+                isLeftActive: action_1.isLeftActive,
+                isDownActive: action_1.isDownActive,
+                isUpActive: action_1.isUpActive,
+                isMonsterActive: action_1.isMonsterActive,
+                isTreasureActive: action_1.isTreasureActive,
+                isLeaderboardOpened: state.isLeaderboardOpened
             };
         }
         case actionTypes_1.CONTROLLER_CLEAN:
             return exports.initialState;
+        case actionTypes_1.CHANGE_LEADERBOARD_MODAL:
+            var action = knownAction;
+            return __assign(__assign({}, state), { isLeaderboardOpened: action.isLeaderboardOpened });
     }
     return state;
 };

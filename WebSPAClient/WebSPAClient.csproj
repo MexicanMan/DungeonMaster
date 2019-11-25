@@ -29,6 +29,7 @@
     <None Remove="ClientApp\src\components\game\Game.tsx" />
     <None Remove="ClientApp\src\components\game\RoomSymbolTypes.ts" />
     <None Remove="ClientApp\src\components\helpers\Loader.tsx" />
+    <None Remove="ClientApp\src\components\helpers\ModalLeaderboard.tsx" />
     <None Remove="ClientApp\src\components\helpers\ModalWindow.tsx" />
     <None Remove="ClientApp\src\components\menu\Auth.tsx" />
     <None Remove="ClientApp\src\components\menu\Leaderboard.tsx" />
@@ -55,8 +56,8 @@
     <TypeScriptCompile Include="ClientApp\src\components\game\Controller.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\game\Field.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\game\Game.tsx" />
-    <TypeScriptCompile Include="ClientApp\src\components\game\RoomSymbolTypes.ts" />
     <TypeScriptCompile Include="ClientApp\src\components\helpers\Loader.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\helpers\ModalLeaderboard.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\helpers\ModalWindow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\menu\BaseWindow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\menu\Auth.tsx" />

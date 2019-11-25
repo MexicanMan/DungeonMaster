@@ -5,6 +5,7 @@ import * as LeaderboardReducer from '../../store/menu/LeaderboardReducer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import BaseGameWindow from '../game/BaseGameWindow';
 
 type LeaderboardProps =
@@ -22,46 +23,57 @@ class Leaderboard extends Component<LeaderboardProps> {
 
     }
 
-    players: LeaderboardReducer.LeaderboardResponse = {
-        players: [{ username: "AAA", treasureCount: 10, isDead: false },
-        { username: "AAA", treasureCount: 10, isDead: true },
-        { username: "AAA", treasureCount: 10, isDead: false },
-        { username: "AAA", treasureCount: 10, isDead: false },
-        { username: "AAA", treasureCount: 10, isDead: false },
-        { username: "AAAAAAAAAAAA", treasureCount: 10, isDead: false },
-        { username: "AAAAAAAAAAAA", treasureCount: 10, isDead: false },
-        { username: "AAAAAAAAAAAA", treasureCount: 7, isDead: true },
-        { username: "AAAAAAAAAAAA", treasureCount: 1, isDead: false },]
+    componentDidMount() {
+        this.props.requestLeaderboardPage(this.props.currentPage);
     }
 
     render() {
+        let prevDis = this.props.isPrev ? "" : "disabled";
+        let nextDis = this.props.isNext ? "" : "disabled";
+
         return (
             <BaseGameWindow>
-                <div className="">
-                    <table className="table table-striped">
-                        <thead>
-                            <tr>
-                                <th className="">№</th>
-                                <th className="">Player</th>
-                                <th className="">Treasures</th>
-                                <th className="">Death Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.players.players.map((player, index) => (
-                                <tr id="player" key={index}>
-                                    <td className="">{index + 1}</td>
-                                    <td className="">{player.username}</td>
-                                    <td className="">{player.treasureCount}</td>
-                                    <td className="">{player.isDead}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                <button type="button" id="backBtn" className="btn btn-primary mb-2 ml-2" onClick={() => { }}>
-                    <span><FontAwesomeIcon className="mr-1" icon={faArrowLeft} /></span> Back
+                <button type="button" id="backBtn" className="btn btn-primary m-2" onClick={() => { this.props.moveToMainMenu(); }}>
+                    To menu
                 </button>
+                <table className="table table-striped">
+                    <thead>
+                        <tr className="d-flex">
+                            <th className="col-1">№</th>
+                            <th className="col-7">Player</th>
+                            <th className="col-2">Treasures</th>
+                            <th className="col-2">Death Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.props.players.map((player, index) => (
+                            <tr id="player" key={index} className="d-flex">
+                                <td className="col-1">{index + 1 + 10 * this.props.currentPage}</td>
+                                <td className="col-7">{player.username}</td>
+                                <td className="col-2">{player.treasureCount}</td>
+                                <td className={"col-2 " + (player.isDead ? "text-danger" : "text-success")}>
+                                    {player.isDead ? "Dead" : "Alive"}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <nav>
+                    <ul className="pagination justify-content-center">
+                        <li className={"page-item " + prevDis}>
+                            <a className="page-link" tabIndex={-1}
+                                onClick={() => this.props.requestLeaderboardPage(this.props.currentPage - 1)}>
+                                <span><FontAwesomeIcon className="mr-1" icon={faArrowLeft} /></span> Prev
+                            </a>
+                        </li>
+                        <li className={"page-item " + nextDis}>
+                            <a className="page-link" tabIndex={-1}
+                                onClick={() => this.props.requestLeaderboardPage(this.props.currentPage + 1)}>
+                                Next <span><FontAwesomeIcon className="ml-1" icon={faArrowRight} /></span> 
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </BaseGameWindow>
         );
     }

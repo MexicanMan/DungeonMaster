@@ -1,27 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var appconfig_1 = require("../../appconfig");
+var actionTypes_1 = require("../actionTypes");
 var LoaderReducer_1 = require("../helpers/LoaderReducer");
 var connected_react_router_1 = require("connected-react-router");
 var Path = require("../../routes/routes");
-function setSessionItems(auth_token, id, username) {
-    sessionStorage.setItem('auth_token', auth_token);
-    sessionStorage.setItem('id', id);
-    sessionStorage.setItem('username', username);
-}
+var PAGE_SIZE = 10;
 exports.actionCreators = {
-    requestAuth: function (username, pwd) { return function (dispatch) {
+    requestLeaderboardPage: function (page) { return function (dispatch) {
         dispatch(LoaderReducer_1.actionCreators.request());
-        fetch(appconfig_1.GATEWAY_ADDR + "/api/auth/", {
-            method: 'POST',
+        fetch("" + appconfig_1.GATEWAY_ADDR + appconfig_1.GAME_CONTROL_ADDR + "/leaderboard?page=" + page, {
+            method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: pwd
-            })
+                'Authorization': "Bearer " + sessionStorage.getItem("auth_token")
+            }
         })
             .then(function (response) {
             if (response.ok)
@@ -30,46 +23,21 @@ exports.actionCreators = {
                 throw response.json();
         })
             .then(function (data) {
-            //setSessionItems(data.auth_token, data.id, username);
-            dispatch(LoaderReducer_1.actionCreators.response());
-            dispatch(exports.actionCreators.moveToMainMenu());
-        })
-            .catch(function (error) {
-            error.then(function (error) {
-                dispatch(LoaderReducer_1.actionCreators.response());
-            });
-        })
-            .catch(function (error) {
-            console.log(error);
-        });
-    }; },
-    requestReg: function (username, pwd) { return function (dispatch) {
-        dispatch(LoaderReducer_1.actionCreators.request());
-        fetch(appconfig_1.GATEWAY_ADDR + "/api/auth/reg/", {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: username,
-                password: pwd
-            })
-        })
-            .then(function (response) {
-            if (response.ok)
-                return response.json();
+            console.log(data);
+            if (data.players.length > 0)
+                dispatch({
+                    type: actionTypes_1.LEADERBOARD_UPDATE_PAGE, currentPage: page,
+                    isPrev: page == 0 ? false : true,
+                    isNext: data.players.length == PAGE_SIZE ? true : false,
+                    players: data.players
+                });
             else
-                throw response.json();
-        })
-            .then(function (data) {
-            //setSessionItems(data.auth_token, data.id, username);
+                dispatch({
+                    type: actionTypes_1.LEADERBOARD_UPDATE_PAGE, currentPage: page,
+                    isPrev: page == 0 ? false : true, isNext: false,
+                    players: []
+                });
             dispatch(LoaderReducer_1.actionCreators.response());
-        })
-            .catch(function (error) {
-            error.then(function (error) {
-                dispatch(LoaderReducer_1.actionCreators.response());
-            });
         })
             .catch(function (error) {
             console.log(error);
@@ -80,39 +48,23 @@ exports.actionCreators = {
 // ----------------
 // REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
 var initialState = {
-    error: '',
-    isNewRegistered: false
+    currentPage: 0,
+    isPrev: false,
+    isNext: true,
+    players: []
 };
 exports.leaderboardReducer = function (state, incomingAction) {
-    /*const action = incomingAction as KnownAction;
-    switch (action.type) {
-        case AUTH_SUCCESS:
-            return {
-                error: '',
-                isNewRegistered: false
-            };
-        case AUTH_REG_SUCCESS:
-            return {
-                error: '',
-                isNewRegistered: true
-            };
-        case AUTH_FAILED:
-            return {
-                error: action.error,
-                isNewRegistered: state.isNewRegistered
-            };
-        case AUTH_ERROR_CLEAN:
-            return {
-                error: '',
-                isNewRegistered: state.isNewRegistered
-            };
-        case AUTH_REGISTERED_CLEAN:
-            return {
-                error: state.error,
-                isNewRegistered: false
-            };
-    }*/
     if (state === void 0) { state = initialState; }
+    var action = incomingAction;
+    switch (action.type) {
+        case actionTypes_1.LEADERBOARD_UPDATE_PAGE:
+            return {
+                currentPage: action.currentPage,
+                isPrev: action.isPrev,
+                isNext: action.isNext,
+                players: action.players
+            };
+    }
     return state;
 };
 //# sourceMappingURL=LeaderboardReducer.js.map
