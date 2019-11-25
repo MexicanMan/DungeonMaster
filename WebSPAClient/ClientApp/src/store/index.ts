@@ -1,6 +1,7 @@
 import * as WeatherForecasts from './WeatherForecasts';
 import * as Counter from './Counter';
 import * as Auth from './menu/AuthReducer';
+import * as Leaderboard from './menu/LeaderboardReducer';
 import * as Loader from './helpers/LoaderReducer';
 import * as Game from './game/GameReducer';
 import * as Field from './game/FieldReducer';
@@ -15,6 +16,7 @@ export interface ApplicationState {
     game: Game.GameState | undefined;
     field: Field.FieldState | undefined;
     controller: Controller.ControllerState | undefined;
+    leaderboard: Leaderboard.LeaderboardState | undefined;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -27,7 +29,8 @@ export const reducers = {
     loader: Loader.loaderReducer,
     game: Game.gameReducer,
     field: Field.fieldReducer,
-    controller: Controller.controllerReducer
+    controller: Controller.controllerReducer,
+    leaderboard: Leaderboard.leaderboardReducer
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are

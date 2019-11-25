@@ -16,6 +16,7 @@ import MainMenu from './components/menu/MainMenu';
 import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
 import Game from './components/game/Game';
+import Leaderboard from './components/menu/Leaderboard';
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
@@ -31,8 +32,8 @@ ReactDOM.render(
                 <PublicRoute exact path="/" component={App} />
                 <PublicRoute path={Path.AUTH} component={Auth} />
                 <PrivateRoute path={Path.MAIN_MENU} component={MainMenu} />
-                <Route path={Path.GAME} component={Game} />
-                <PrivateRoute path={Path.LEADERBOARD} component={Counter} />
+                <PrivateRoute path={Path.GAME} component={Game} />
+                <PrivateRoute path={Path.LEADERBOARD} component={Leaderboard} />
             </Switch>
         </ConnectedRouter>
     </Provider>,

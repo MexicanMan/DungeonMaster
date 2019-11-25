@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var WeatherForecasts = require("./WeatherForecasts");
 var Counter = require("./Counter");
 var Auth = require("./menu/AuthReducer");
+var Leaderboard = require("./menu/LeaderboardReducer");
 var Loader = require("./helpers/LoaderReducer");
 var Game = require("./game/GameReducer");
 var Field = require("./game/FieldReducer");
@@ -17,6 +18,7 @@ exports.reducers = {
     loader: Loader.loaderReducer,
     game: Game.gameReducer,
     field: Field.fieldReducer,
-    controller: Controller.controllerReducer
+    controller: Controller.controllerReducer,
+    leaderboard: Leaderboard.leaderboardReducer
 };
 //# sourceMappingURL=index.js.map

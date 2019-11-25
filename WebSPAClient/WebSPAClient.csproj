@@ -27,9 +27,12 @@
     <None Remove="ClientApp\src\components\game\Controller.tsx" />
     <None Remove="ClientApp\src\components\game\Field.tsx" />
     <None Remove="ClientApp\src\components\game\Game.tsx" />
+    <None Remove="ClientApp\src\components\game\RoomSymbolTypes.ts" />
     <None Remove="ClientApp\src\components\helpers\Loader.tsx" />
+    <None Remove="ClientApp\src\components\helpers\ModalLeaderboard.tsx" />
     <None Remove="ClientApp\src\components\helpers\ModalWindow.tsx" />
     <None Remove="ClientApp\src\components\menu\Auth.tsx" />
+    <None Remove="ClientApp\src\components\menu\Leaderboard.tsx" />
     <None Remove="ClientApp\src\components\menu\MainMenu.tsx" />
     <None Remove="ClientApp\src\PrivateRoute.tsx" />
     <None Remove="ClientApp\src\routes.ts" />
@@ -43,6 +46,7 @@
     <None Remove="ClientApp\src\store\helpers\LoaderReducer.ts" />
     <None Remove="ClientApp\src\store\helpers\MonsterTypes.ts" />
     <None Remove="ClientApp\src\store\menu\AuthReducer.ts" />
+    <None Remove="ClientApp\src\store\menu\LeaderboardReducer.ts" />
     <None Remove="ClientApp\src\store\menu\MainMenuReducer.ts" />
   </ItemGroup>
 
@@ -53,9 +57,11 @@
     <TypeScriptCompile Include="ClientApp\src\components\game\Field.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\game\Game.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\helpers\Loader.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\helpers\ModalLeaderboard.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\helpers\ModalWindow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\menu\BaseWindow.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\menu\Auth.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\menu\Leaderboard.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\menu\MainMenu.tsx" />
     <TypeScriptCompile Include="ClientApp\src\routes\PublicRoute.tsx">
       <SubType>Code</SubType>
@@ -71,6 +77,7 @@
     <TypeScriptCompile Include="ClientApp\src\store\helpers\LoaderReducer.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\helpers\MonsterTypes.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\menu\AuthReducer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\menu\LeaderboardReducer.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\menu\MainMenuReducer.ts" />
   </ItemGroup>
 

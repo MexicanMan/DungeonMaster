@@ -7,7 +7,7 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons/faInfoCircle';
 type ModalProps = {
     open: boolean,
     isError: boolean,
-    text: string,
+    text?: string,
     onClose: () => void,
 }
 

@@ -10,6 +10,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons/faArrowLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Directions } from '../../store/helpers/Directions';
+import ModalLeaderboard from '../helpers/ModalLeaderboard';
 
 type ControllerProps =
     ControllerReducer.ControllerState // ... state we've requested from the Redux store
@@ -18,17 +19,12 @@ type ControllerProps =
 class Controller extends Component<ControllerProps> {
     constructor(props: ControllerProps) {
         super(props);
-
-        this.alertClosed = this.alertClosed.bind(this)
-    }
-
-    alertClosed() {
-
     }
 
     render() {
         return (
             <div id="controllerSide" className="col-6 pr-1">
+                <ModalLeaderboard open={this.props.isLeaderboardOpened} onClose={() => { this.props.changeLeaderboardModal(false); }} />
                 <div id="menuRow" className="row m-2 p-1 no-gutters">
                     <div className="col-6">
                         <button type="button" className="btn btn-primary" onClick={() => { this.props.moveToMenu(); }}>
@@ -36,7 +32,7 @@ class Controller extends Component<ControllerProps> {
                         </button>
                     </div>
                 <div className="col-6">
-                    <button type="button" className="btn btn-primary float-right" onClick={() => { }}>
+                        <button type="button" className="btn btn-primary float-right" onClick={() => { this.props.changeLeaderboardModal(true); }}>
                             Leaderboard
                         </button>
                     </div>
