@@ -27,6 +27,7 @@
     <None Remove="ClientApp\src\components\game\Controller.tsx" />
     <None Remove="ClientApp\src\components\game\Field.tsx" />
     <None Remove="ClientApp\src\components\game\Game.tsx" />
+    <None Remove="ClientApp\src\components\game\Log.tsx" />
     <None Remove="ClientApp\src\components\game\RoomSymbolTypes.ts" />
     <None Remove="ClientApp\src\components\helpers\Loader.tsx" />
     <None Remove="ClientApp\src\components\helpers\ModalLeaderboard.tsx" />
@@ -41,6 +42,7 @@
     <None Remove="ClientApp\src\store\game\ControllerReducer.ts" />
     <None Remove="ClientApp\src\store\game\FieldReducer.ts" />
     <None Remove="ClientApp\src\store\game\GameReducer.ts" />
+    <None Remove="ClientApp\src\store\game\LogReducer.ts" />
     <None Remove="ClientApp\src\store\helpers\Directions.ts" />
     <None Remove="ClientApp\src\store\helpers\ErrorResponse.ts" />
     <None Remove="ClientApp\src\store\helpers\LoaderReducer.ts" />
@@ -56,6 +58,7 @@
     <TypeScriptCompile Include="ClientApp\src\components\game\Controller.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\game\Field.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\game\Game.tsx" />
+    <TypeScriptCompile Include="ClientApp\src\components\game\Log.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\helpers\Loader.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\helpers\ModalLeaderboard.tsx" />
     <TypeScriptCompile Include="ClientApp\src\components\helpers\ModalWindow.tsx" />
@@ -72,6 +75,7 @@
     <TypeScriptCompile Include="ClientApp\src\store\game\ControllerReducer.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\game\FieldReducer.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\game\GameReducer.ts" />
+    <TypeScriptCompile Include="ClientApp\src\store\game\LogReducer.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\helpers\Directions.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\helpers\ErrorResponse.ts" />
     <TypeScriptCompile Include="ClientApp\src\store\helpers\LoaderReducer.ts" />

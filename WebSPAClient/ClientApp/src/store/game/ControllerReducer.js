@@ -32,9 +32,9 @@ exports.actionCreators = {
         dispatch(connected_react_router_1.push(Path.MAIN_MENU));
     }; },
     cleanState: function () { return ({ type: actionTypes_1.CONTROLLER_CLEAN }); },
-    monsterAtk: function () { return function (dispatch) { dispatch(GameReducer_1.actionCreators.gamePatchRequest('monster')); }; },
-    treasurePkp: function () { return function (dispatch) { dispatch(GameReducer_1.actionCreators.gamePatchRequest('treasure')); }; },
-    moveToRoom: function (toDir) { return function (dispatch) { dispatch(GameReducer_1.actionCreators.gamePatchRequest('room', toDir)); }; },
+    monsterAtk: function () { return function (dispatch) { dispatch(GameReducer_1.actionCreators.gamePatchRequest('monster', 'You attacked the monster!')); }; },
+    treasurePkp: function () { return function (dispatch) { dispatch(GameReducer_1.actionCreators.gamePatchRequest('treasure', 'You picked up the treasure!')); }; },
+    moveToRoom: function (toDir) { return function (dispatch) { dispatch(GameReducer_1.actionCreators.gamePatchRequest('room', 'You entered the room #', toDir)); }; },
     changeLeaderboardModal: function (isOpened) { return ({
         type: actionTypes_1.CHANGE_LEADERBOARD_MODAL, isLeaderboardOpened: isOpened
     }); },
@@ -52,7 +52,6 @@ exports.initialState = {
 };
 exports.controllerReducer = function (state, incomingAction) {
     if (state === void 0) { state = exports.initialState; }
-    console.log(incomingAction);
     var knownAction = incomingAction;
     switch (knownAction.type) {
         case actionTypes_1.CONTROLLER_UPDATE: {

@@ -9,4 +9,5 @@
 
 #log {
     max-height: 100px;
+    white-space: pre-wrap;
 }

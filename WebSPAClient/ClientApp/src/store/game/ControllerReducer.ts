@@ -70,11 +70,11 @@ export const actionCreators = {
 
     cleanState: () => ({ type: CONTROLLER_CLEAN } as ControllerCleanAction),
 
-    monsterAtk: (): AppThunkAction<any> => (dispatch) => { dispatch(gameActionCreators.gamePatchRequest('monster')); },
+    monsterAtk: (): AppThunkAction<any> => (dispatch) => { dispatch(gameActionCreators.gamePatchRequest('monster', 'You attacked the monster!')); },
 
-    treasurePkp: (): AppThunkAction<any> => (dispatch) => { dispatch(gameActionCreators.gamePatchRequest('treasure')); },
+    treasurePkp: (): AppThunkAction<any> => (dispatch) => { dispatch(gameActionCreators.gamePatchRequest('treasure', 'You picked up the treasure!')); },
 
-    moveToRoom: (toDir: Directions): AppThunkAction<any> => (dispatch) => { dispatch(gameActionCreators.gamePatchRequest('room', toDir)); },
+    moveToRoom: (toDir: Directions): AppThunkAction<any> => (dispatch) => { dispatch(gameActionCreators.gamePatchRequest('room', 'You entered the room #', toDir)); },
 
     changeLeaderboardModal: (isOpened: boolean) => (
         {
@@ -97,7 +97,6 @@ export const initialState: ControllerState = {
 };
 
 export const controllerReducer: Reducer<ControllerState> = (state: ControllerState = initialState, incomingAction: Action): ControllerState => {
-    console.log(incomingAction);
     const knownAction = incomingAction as KnownAction;
     switch (knownAction.type) {
         case CONTROLLER_UPDATE: {

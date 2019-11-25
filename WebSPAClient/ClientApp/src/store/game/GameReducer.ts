@@ -4,31 +4,11 @@ import { GATEWAY_ADDR, GAME_CONTROL_ADDR } from '../../appconfig';
 import {  } from '../actionTypes';
 import { actionCreators as loaderActionCreators } from '../helpers/LoaderReducer';
 import ErrorResponse from '../helpers/ErrorResponse';
-import { push } from 'connected-react-router';
-import * as Path from '../../routes/routes';
-import { FieldState, actionCreators as fieldActionCreators, initialState as FieldInitialState } from './FieldReducer';
+import { actionCreators as fieldActionCreators } from './FieldReducer';
 import { actionCreators as controllerActionCreators } from './ControllerReducer';
+import { actionCreators as logActionCreators } from './LogReducer';
 import { MonsterTypes } from '../helpers/MonsterTypes';
 import { Directions } from '../helpers/Directions';
-
-// -----------------
-// STATE - This defines the type of data maintained in the Redux store.
-
-export interface GameState {
-    field: FieldState | undefined,
-}
-
-// -----------------
-// ACTIONS - These are serializable (hence replayable) descriptions of state transitions.
-// They do not themselves have any side-effects; they just describe something that is going to happen.
-
-/*interface AuthSuccessAction {
-    type: typeof AUTH_SUCCESS;
-}*/
-
-// Declare a 'discriminated union' type. This guarantees that all references to 'type' properties contain one of the
-// declared type strings (and not any other arbitrary string).
-//type KnownAction = AuthSuccessAction;
 
 // ----------------
 // ACTION CREATORS - These are functions exposed to UI components that will trigger a state transition.
@@ -88,6 +68,21 @@ function GameDataUpdate(dispatch: (action: any) => void, data: GameDataResponse,
         dispatch(fieldActionCreators.monsterUpdate(undefined, undefined, undefined));
 }
 
+function getCurrentDate(): string {
+    let now = new Date();
+
+    let stringDate = now.getFullYear().toString() + "-" + now.getMonth().toString() + "-" + now.getDate().toString() +
+        " " + now.getHours().toString() + ":" + now.getMinutes().toString();
+
+    return stringDate;
+}
+
+function actionLogBuilder(action: string): string {
+    let actionString = "• " + getCurrentDate() + " " + action;
+
+    return actionString;
+}
+
 export const actionCreators = {
     requestEnterGame: (): AppThunkAction<any> => (dispatch) => {
         dispatch(loaderActionCreators.request());
@@ -108,6 +103,7 @@ export const actionCreators = {
             .then(data => {
                 GameDataUpdate(dispatch, data);
 
+                dispatch(logActionCreators.logUpdate(actionLogBuilder(`You entered the game! Now you are at the room #${data.room.roomId}.`)));
                 dispatch(loaderActionCreators.response());
             })
             .catch((error: Promise<ErrorResponse>) => {
@@ -120,7 +116,7 @@ export const actionCreators = {
             });
     },
 
-    gamePatchRequest: (action: string, bodyDirection?: Directions): AppThunkAction<any> => (dispatch) => {
+    gamePatchRequest: (action: string, actionLogString: string, bodyDirection?: Directions): AppThunkAction<any> => (dispatch) => {
         dispatch(loaderActionCreators.request());
 
         fetch(`${GATEWAY_ADDR}${GAME_CONTROL_ADDR}/${action}`, {
@@ -143,6 +139,10 @@ export const actionCreators = {
             .then(data => {
                 GameDataUpdate(dispatch, data, bodyDirection);
 
+                if (bodyDirection == undefined)
+                    dispatch(logActionCreators.logUpdate(actionLogBuilder(actionLogString)));
+                else
+                    dispatch(logActionCreators.logUpdate(actionLogBuilder(actionLogString + data.room.roomId)));
                 dispatch(loaderActionCreators.response());
             })
             .catch((error: Promise<ErrorResponse>) => {
@@ -158,45 +158,6 @@ export const actionCreators = {
     cleanGameStates: () => (dispatch: Dispatch) => {
         dispatch(fieldActionCreators.cleanState());
         dispatch(controllerActionCreators.cleanState());
+        dispatch(logActionCreators.cleanState());
     }
-};
-
-// ----------------
-// REDUCER - For a given state and action, returns the new state. To support time travel, this must not mutate the old state.
-
-const initialState: GameState = {
-    field: FieldInitialState,
-};
-
-export const gameReducer: Reducer<GameState> = (state: GameState = initialState, incomingAction: Action): GameState => {
-    /*const action = incomingAction as KnownAction;
-    switch (action.type) {
-        case AUTH_SUCCESS:
-            return {
-                error: '',
-                isNewRegistered: false
-            };
-        case AUTH_REG_SUCCESS:
-            return {
-                error: '',
-                isNewRegistered: true
-            };
-        case AUTH_FAILED:
-            return {
-                error: action.error,
-                isNewRegistered: state.isNewRegistered
-            };
-        case AUTH_ERROR_CLEAN:
-            return {
-                error: '',
-                isNewRegistered: state.isNewRegistered
-            };
-        case AUTH_REGISTERED_CLEAN:
-            return {
-                error: state.error,
-                isNewRegistered: false
-            };
-    }*/
-
-    return state;
 };
