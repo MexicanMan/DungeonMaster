@@ -8,6 +8,7 @@ using Gateway.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Polly.CircuitBreaker;
 
 namespace Gateway.Controllers
 {
@@ -38,6 +39,14 @@ namespace Gateway.Controllers
             {
                 return BadRequest(new ErrorResponse() { Error = e.Message });
             }
+            catch (BrokenCircuitException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()
+                {
+                    Error = "Some services are not feeling " +
+                    "good. Try later!"
+                });
+            }
             catch (InternalException e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
@@ -54,6 +63,14 @@ namespace Gateway.Controllers
                 GameData data = await _gameService.EnterGame(userId);
 
                 return Ok(data);
+            }
+            catch (BrokenCircuitException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()
+                {
+                    Error = "Some services are not feeling " +
+                    "good. Try later!"
+                });
             }
             catch (WrongInputDataException e)
             {
@@ -88,6 +105,14 @@ namespace Gateway.Controllers
             {
                 return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
             }
+            catch (BrokenCircuitException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()
+                {
+                    Error = "Some services are not feeling " +
+                    "good. Try later!"
+                });
+            }
             catch (InternalException e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
@@ -116,6 +141,14 @@ namespace Gateway.Controllers
             catch (PermissionsDeniedException e)
             {
                 return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
+            }
+            catch (BrokenCircuitException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()
+                {
+                    Error = "Some services are not feeling " +
+                    "good. Try later!"
+                });
             }
             catch (InternalException e)
             {
@@ -150,6 +183,14 @@ namespace Gateway.Controllers
             {
                 return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
             }
+            catch (BrokenCircuitException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()
+                {
+                    Error = "Some services are not feeling " +
+                    "good. Try later!"
+                });
+            }
             catch (InternalException e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
@@ -164,6 +205,14 @@ namespace Gateway.Controllers
                 IEnumerable<LeaderboardUser> leaderboardPage = await _gameService.GetLeaderboard(page);
 
                 return Ok(new LeaderboardModel() { Players = leaderboardPage });
+            }
+            catch (BrokenCircuitException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()
+                {
+                    Error = "Some services are not feeling " +
+                    "good. Try later!"
+                });
             }
             catch (InternalException e)
             {

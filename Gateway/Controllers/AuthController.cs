@@ -73,6 +73,14 @@ namespace Gateway.Controllers
             {
                 return BadRequest(new ErrorResponse() { Error = e.Message });
             }
+            catch (BrokenCircuitException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()
+                {
+                    Error = "User Service is feeling " +
+                    "not good. Try later!"
+                });
+            }
             catch (InternalException e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
