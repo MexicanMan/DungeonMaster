@@ -67,6 +67,8 @@ namespace Gateway
 
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IAuthService, AuthService>();
+
+            services.AddTransient<ILab4Service, Lab4Service>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
