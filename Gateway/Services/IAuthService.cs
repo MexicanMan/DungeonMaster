@@ -10,5 +10,6 @@ namespace Gateway.Services
     {
         Task<AuthResponse> RegisterAndLogin(string username, string pwd);
         Task<AuthResponse> Login(string username, string pwd);
+        Task SendFailing();
     }
 }

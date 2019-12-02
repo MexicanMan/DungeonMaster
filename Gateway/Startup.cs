@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Gateway.Authentication;
 using Gateway.Configs;
@@ -14,6 +15,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace Gateway
 {
@@ -36,17 +39,23 @@ namespace Gateway
             {
                 client.BaseAddress = new Uri(appSettingsSection.Get<AppSettings>().UsersAPIUrl);
                 client.DefaultRequestHeaders.Add("User-Agent", appSettingsSection.Get<AppSettings>().UserAgent);
-            });
+            })
+            .AddPolicyHandler(GetRetryPolicy())
+            .AddPolicyHandler(GetCircuitBreakerPolicy());
             services.AddHttpClient<IRoomsClient, RoomsClient>(client =>
             {
                 client.BaseAddress = new Uri(appSettingsSection.Get<AppSettings>().RoomsAPIUrl);
                 client.DefaultRequestHeaders.Add("User-Agent", appSettingsSection.Get<AppSettings>().UserAgent);
-            });
+            })
+            .AddPolicyHandler(GetRetryPolicy())
+            .AddPolicyHandler(GetCircuitBreakerPolicy());
             services.AddHttpClient<IMonstersClient, MonstersClient>(client =>
             {
                 client.BaseAddress = new Uri(appSettingsSection.Get<AppSettings>().MonstersAPIUrl);
                 client.DefaultRequestHeaders.Add("User-Agent", appSettingsSection.Get<AppSettings>().UserAgent);
-            });
+            })
+            .AddPolicyHandler(GetRetryPolicy())
+            .AddPolicyHandler(GetCircuitBreakerPolicy());
 
             services.AddAuthentication(options =>
             {
@@ -95,6 +104,23 @@ namespace Gateway
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .CircuitBreakerAsync(3, TimeSpan.FromSeconds(30), (ex, dur) => { Console.WriteLine("CB opened"); }, () => { Console.WriteLine("CB reset"); });
+        }
+
+        private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            return HttpPolicyExtensions
+                .HandleTransientHttpError()
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan, retryCount, context) =>
+                {
+                    Console.WriteLine("Retry attempt!");
+                });
         }
     }
 }

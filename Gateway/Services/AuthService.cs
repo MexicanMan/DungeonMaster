@@ -28,5 +28,10 @@ namespace Gateway.Services
             await _usersClient.PostRegister(username, pwd);
             return await _usersClient.PostAuth(username, pwd);
         }
+
+        public async Task SendFailing()
+        {
+            await _usersClient.GetFailing();
+        }
     }
 }

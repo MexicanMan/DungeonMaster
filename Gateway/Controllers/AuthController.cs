@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Polly.CircuitBreaker;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -41,10 +42,18 @@ namespace Gateway.Controllers
             {
                 return BadRequest(new ErrorResponse() { Error = e.Message });
             }
+            catch (BrokenCircuitException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()
+                {
+                    Error = "User Service is feeling " +
+                    "not good. Try later!"
+                });
+            }
             catch (InternalException e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
-            }
+            }            
         }
 
         [HttpPost("reg")]
@@ -67,6 +76,24 @@ namespace Gateway.Controllers
             catch (InternalException e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
+            }
+        }
+
+        [HttpGet("failing")]
+        public async Task<IActionResult> FailingGet()
+        {
+            try
+            {
+                await _authService.SendFailing();
+
+                return Ok();
+            }
+            catch (BrokenCircuitException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()
+                {
+                    Error = "User server is feeling not good. Try later!"
+                });
             }
         }
     }

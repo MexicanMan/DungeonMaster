@@ -150,5 +150,11 @@ namespace Gateway.Services.Clients
                 throw new InternalException($"Error during getting leaderboard at auth server!\n" +
                     $"Code {resp.StatusCode} with {content}.");
         }
+
+        public async Task GetFailing()
+        {
+            var resp = await _httpClient.GetAsync($"failing");
+            await resp.Content.ReadAsStringAsync();
+        }
     }
 }

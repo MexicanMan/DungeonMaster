@@ -143,5 +143,11 @@ namespace User.API.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, e.Message);
             }
         }
+
+        [HttpGet("failing")]
+        public async Task<IActionResult> FailingGet()
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Ooops");
+        }
     }
 }

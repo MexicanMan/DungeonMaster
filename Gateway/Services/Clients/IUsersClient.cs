@@ -16,5 +16,6 @@ namespace Gateway.Services.Clients
         Task<Player> PatchPickupTreasure(string id);
         Task<Player> PatchHpLoss(string id);
         Task<IEnumerable<LeaderboardUser>> GetLeaderboard(int page);
+        Task GetFailing();
     }
 }
