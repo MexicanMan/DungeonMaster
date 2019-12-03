@@ -44,7 +44,7 @@ namespace Gateway.Services
             {
                 player = await GetPlayer(userId);
             }
-            catch(Exception)
+            catch(Exception )
             {
                 return new GameData()
                 {

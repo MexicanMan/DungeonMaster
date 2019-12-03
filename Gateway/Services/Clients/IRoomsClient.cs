@@ -16,5 +16,6 @@ namespace Gateway.Services.Clients
         Task<Room> DeleteMonster(int roomId);
         Task<Room> GetRandomRoom(Direction direction);
         Task<Room> PatchOpenDoor(int roomId, Direction toDir, int toRoomId);
+        Task<Room> PatchUpdateRoom(Room room);
     }
 }

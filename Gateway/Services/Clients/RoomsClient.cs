@@ -141,5 +141,21 @@ namespace Gateway.Services.Clients
                 throw new InternalException($"Error during opening door at room server!\n" +
                     $"Code {resp.StatusCode} with {content}.");
         }
+
+        public async Task<Room> PatchUpdateRoom(Room room)
+        {
+            string stringPayload = await Task.Run(() => JsonConvert.SerializeObject(room));
+
+            StringContent httpContent = new StringContent(stringPayload, Encoding.UTF8, "application/json");
+
+            var resp = await _httpClient.PatchAsync($"{room.RoomId}/update", httpContent);
+            string content = await resp.Content.ReadAsStringAsync();
+
+            if (resp.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<Room>(content);
+            else
+                throw new InternalException($"Error during updating room at room server!\n" +
+                    $"Code {resp.StatusCode} with {content}.");
+        }
     }
 }

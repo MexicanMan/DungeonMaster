@@ -6,6 +6,7 @@ using Gateway.Services.Clients;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Gateway.Services
@@ -93,13 +94,40 @@ namespace Gateway.Services
 
             if (player.CurrentRoomId != null)
             {
-                Room room = await _roomsClient.GetRoomById((int) player.CurrentRoomId);
+                Room room = null;
+                try
+                {
+                    room = await _roomsClient.GetRoomById((int) player.CurrentRoomId);
+                }
+                catch (Exception)
+                {
+                    throw new RollbackException("Room service is down, rollback was made!");
+                }
+
                 if (room.MonsterId == null)
                 {
                     // Pickup treasure in the room
-                    room = await _roomsClient.PatchPickupTreasure((int) player.CurrentRoomId);
+                    Room oldRoom = room;
+                    try
+                    {
+                        room = await _roomsClient.PatchPickupTreasure((int)player.CurrentRoomId);
+                    }
+                    catch (Exception)
+                    {
+                        throw new RollbackException("Room service is down, rollback was made!");
+                    }
                     // And give it to the player
-                    player = await _usersClient.PatchPickupTreasure(userId);
+                    try
+                    {
+                        Console.WriteLine("HEEEEEEEEEEEEEEEEERE");
+                        Thread.Sleep(3000);
+                        player = await _usersClient.PatchPickupTreasure(userId);
+                    }
+                    catch (Exception)
+                    {
+                        room = await _roomsClient.PatchUpdateRoom(oldRoom);
+                        throw new RollbackException("User service is down, rollback was made!");
+                    }
 
                     return new GameData() { Player = player, Room = room, Monster = null };
                 }

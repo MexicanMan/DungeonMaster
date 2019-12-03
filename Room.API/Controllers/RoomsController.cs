@@ -155,5 +155,24 @@ namespace Room.API.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, e.Message);
             }
         }
+
+        [HttpPatch("{id}/update")]
+        public async Task<IActionResult> RoomUpdate(int id, [FromBody] RoomModel room)
+        {
+            try
+            {
+                var newRoom = await _roomsService.RoomUpdate(id, room);
+
+                return Ok(newRoom);
+            }
+            catch (DatabaseException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+            catch (NoSuchRoomException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
+        }
     }
 }

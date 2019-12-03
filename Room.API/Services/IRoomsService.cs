@@ -16,5 +16,6 @@ namespace Room.API.Services
         Task<RoomModel> DoorOpen(int thisRoomId, Direction dir, int toRoomId);
         Task<RoomModel> TreasurePickup(int id);
         Task<RoomModel> MonsterDeletion(int id);
+        Task<RoomModel> RoomUpdate(int id, RoomModel room);
     }
 }

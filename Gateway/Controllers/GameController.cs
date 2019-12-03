@@ -105,6 +105,10 @@ namespace Gateway.Controllers
             {
                 return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
             }
+            catch (RollbackException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
+            }
             catch (BrokenCircuitException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse()

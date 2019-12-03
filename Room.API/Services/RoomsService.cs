@@ -293,5 +293,20 @@ namespace Room.API.Services
 
             return room;
         }
+
+        public async Task<RoomModel> RoomUpdate(int id, RoomModel room)
+        {
+            try
+            {
+                _roomContext.Rooms.Update(room);
+                await _roomContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new DatabaseException(e.Message, e);
+            }
+
+            return room;
+        }
     }
 }
