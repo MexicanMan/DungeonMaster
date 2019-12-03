@@ -156,5 +156,12 @@ namespace Gateway.Services.Clients
             var resp = await _httpClient.GetAsync($"failing");
             await resp.Content.ReadAsStringAsync();
         }
+
+        public async Task<bool> HealthCheck()
+        {
+            var resp = await _httpClient.GetAsync($"health");
+
+            return resp.IsSuccessStatusCode;
+        }
     }
 }

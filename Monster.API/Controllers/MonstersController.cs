@@ -83,5 +83,11 @@ namespace Monster.API.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, e.Message);
             }
         }
+
+        [HttpGet("health")]
+        public async Task<IActionResult> HealthCheck()
+        {
+            return Ok();
+        }
     }
 }

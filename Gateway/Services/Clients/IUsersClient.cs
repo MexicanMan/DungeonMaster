@@ -17,5 +17,6 @@ namespace Gateway.Services.Clients
         Task<Player> PatchHpLoss(string id);
         Task<IEnumerable<LeaderboardUser>> GetLeaderboard(int page);
         Task GetFailing();
+        Task<bool> HealthCheck();
     }
 }

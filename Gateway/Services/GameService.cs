@@ -119,7 +119,7 @@ namespace Gateway.Services
                     // And give it to the player
                     try
                     {
-                        Console.WriteLine("HEEEEEEEEEEEEEEEEERE");
+                        Console.WriteLine("HEEEEEEEEEEEEEEEEERE");  // For test purposes
                         Thread.Sleep(3000);
                         player = await _usersClient.PatchPickupTreasure(userId);
                     }

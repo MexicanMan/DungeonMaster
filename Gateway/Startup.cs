@@ -7,6 +7,7 @@ using Gateway.Authentication;
 using Gateway.Configs;
 using Gateway.Services;
 using Gateway.Services.Clients;
+using Gateway.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -69,6 +70,9 @@ namespace Gateway
             {
                 options.AddPolicy("Player", policy => policy.RequireClaim("Player"));
             });
+
+            services.AddSingleton(new PendingRequestsStorage());
+            services.AddHostedService<PendingRequestsService>();
 
             services.AddCors();
 

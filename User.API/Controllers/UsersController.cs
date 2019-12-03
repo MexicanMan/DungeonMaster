@@ -149,5 +149,11 @@ namespace User.API.Controllers
         {
             return StatusCode(StatusCodes.Status500InternalServerError, "Ooops");
         }
+
+        [HttpGet("health")]
+        public async Task<IActionResult> HealthCheck()
+        {
+            return Ok();
+        }
     }
 }

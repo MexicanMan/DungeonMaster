@@ -44,6 +44,33 @@ namespace Gateway.Controllers
             }
         }
 
-       
+        [HttpPatch("monster")]
+        public async Task<IActionResult> AttackMonster()
+        {
+            string userId = HttpContext.User.Claims.First(c => c.Type == "id").Value;
+
+            try
+            {
+                GameData data = await _gameService.AttackMonster(userId);
+
+                return Ok(data);
+            }
+            catch (WrongInputDataException e)
+            {
+                return BadRequest(new ErrorResponse() { Error = e.Message });
+            }
+            catch (NullReferenceException e)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
+            }
+            catch (PermissionsDeniedException e)
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new ErrorResponse() { Error = e.Message });
+            }
+            catch (InternalException e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse() { Error = e.Message });
+            }
+        }
     }
 }

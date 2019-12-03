@@ -70,5 +70,12 @@ namespace Gateway.Services.Clients
                 throw new InternalException($"Error during monster deletion at monster server!\n" +
                     $"Code {resp.StatusCode} with {content}.");
         }
+
+        public async Task<bool> HealthCheck()
+        {
+            var resp = await _httpClient.GetAsync($"health");
+
+            return resp.IsSuccessStatusCode;
+        }
     }
 }

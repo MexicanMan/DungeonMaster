@@ -12,5 +12,6 @@ namespace Gateway.Services.Clients
         Task<Monster> GetMonsterById(int id);
         Task<bool> PatchAttackMonster(int monsterId);
         Task<bool> DeleteMonster(int monsterId);
+        Task<bool> HealthCheck();
     }
 }

@@ -10,7 +10,7 @@ namespace Gateway.Services
     public interface ILab4Service
     {
         Task<Player> GetPlayer(string userId);
-
         Task<GameData> GetDegrRoom(string userId);
+        Task<GameData> AttackMonster(string userId);
     }
 }

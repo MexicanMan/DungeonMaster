@@ -83,7 +83,7 @@ namespace Gateway.Controllers
         }
 
         [HttpPatch("treasure")]
-        public async Task<IActionResult> PickUpTreasure()
+        public async Task<IActionResult> PickUpTreasure()  
         {
             string userId = HttpContext.User.Claims.First(c => c.Type == "id").Value;
 
