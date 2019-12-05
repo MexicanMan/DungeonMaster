@@ -9,6 +9,7 @@ function setSessionItems(auth_token, id, username) {
     sessionStorage.setItem('auth_token', auth_token);
     sessionStorage.setItem('id', id);
     sessionStorage.setItem('username', username);
+    sessionStorage.setItem('scheme', "MicroAuth");
 }
 exports.actionCreators = {
     requestAuth: function (username, pwd) { return function (dispatch) {
@@ -45,6 +46,10 @@ exports.actionCreators = {
             .catch(function (error) {
             console.log(error);
         });
+    }; },
+    requestOAuth: function () { return function (dispatch) {
+        dispatch(LoaderReducer_1.actionCreators.request());
+        window.location.href = 'http://localhost:5010/connect/authorize?client_id=spa&scope=openid profile api1&response_type=code&redirect_uri=https://localhost:8081/oacallback';
     }; },
     requestReg: function (username, pwd) { return function (dispatch) {
         dispatch(LoaderReducer_1.actionCreators.request());

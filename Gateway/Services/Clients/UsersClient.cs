@@ -24,7 +24,7 @@ namespace Gateway.Services.Clients
 
         public async Task<bool> GetTokenCorrectness(string token)
         {
-            _httpClient.DefaultRequestHeaders.Add("Authorization", token);
+            _httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
             //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, token);
             var resp = await _httpClient.GetAsync("token");
 

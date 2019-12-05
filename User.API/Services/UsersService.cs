@@ -56,6 +56,12 @@ namespace User.API.Services
             if (!result.Succeeded)
                 throw new RegisterException(result.Errors.First().Description);
 
+            result = await _userManager.AddClaimsAsync(user, new[]
+            {
+                new Claim(ClaimConstants.JwtClaimIdentifiers.Id, user.Id),
+                new Claim(ClaimConstants.JwtClaimIdentifiers.Rol, ClaimConstants.JwtClaims.ApiAccess)
+            });
+
             return user;
         }
 

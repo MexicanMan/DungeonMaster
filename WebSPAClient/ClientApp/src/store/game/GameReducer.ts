@@ -91,7 +91,7 @@ export const actionCreators = {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem("auth_token")}`
+                'Authorization': `${sessionStorage.getItem("scheme")} ${sessionStorage.getItem("auth_token")}`
             }
         })
              .then(response => {
@@ -106,11 +106,11 @@ export const actionCreators = {
                 dispatch(logActionCreators.logUpdate(actionLogBuilder(`You entered the game! Now you are at the room #${data.room.roomId}.`)));
                 dispatch(loaderActionCreators.response());
             })
-            .catch((error: Promise<ErrorResponse>) => {
+            /*.catch((error: Promise<ErrorResponse>) => {
                 error.then(error => {
                     dispatch(loaderActionCreators.response())
                 });
-            })
+            })*/
             .catch(error => {
                 console.log(error);
             });
@@ -124,7 +124,7 @@ export const actionCreators = {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem("auth_token")}`
+                'Authorization': `${sessionStorage.getItem("scheme")} ${sessionStorage.getItem("auth_token")}`
             },
             body: bodyDirection == undefined ? null : JSON.stringify({
                 toDir: bodyDirection

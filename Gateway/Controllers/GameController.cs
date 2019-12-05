@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Gateway.Controllers
 {
     [Route("api/game")]
-    [Authorize(Policy = "Player")]
+    [Authorize(Policy = "Player", AuthenticationSchemes = "MicroAuth,Bearer")]
     [ApiController]
     public class GameController : ControllerBase
     {
@@ -26,7 +26,7 @@ namespace Gateway.Controllers
         [HttpGet("user")]
         public async Task<IActionResult> GetUser()
         {
-            string userId = HttpContext.User.Claims.First(c => c.Type == "id").Value;
+            string userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
 
             try
             {
@@ -47,7 +47,7 @@ namespace Gateway.Controllers
         [HttpGet("room")]
         public async Task<IActionResult> EnterGame()
         {
-            string userId = HttpContext.User.Claims.First(c => c.Type == "id").Value;
+            string userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
 
             try
             {
@@ -68,7 +68,7 @@ namespace Gateway.Controllers
         [HttpPatch("treasure")]
         public async Task<IActionResult> PickUpTreasure()
         {
-            string userId = HttpContext.User.Claims.First(c => c.Type == "id").Value;
+            string userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
 
             try
             {
@@ -97,7 +97,7 @@ namespace Gateway.Controllers
         [HttpPatch("monster")]
         public async Task<IActionResult> AttackMonster()
         {
-            string userId = HttpContext.User.Claims.First(c => c.Type == "id").Value;
+            string userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
 
             try
             {
@@ -126,7 +126,7 @@ namespace Gateway.Controllers
         [HttpPatch("room")]
         public async Task<IActionResult> Move([FromBody] DirectionWrapper to)
         {
-            string userId = HttpContext.User.Claims.First(c => c.Type == "id").Value;
+            string userId = HttpContext.User.Claims.First(c => c.Type == "sub").Value;
 
             try
             {

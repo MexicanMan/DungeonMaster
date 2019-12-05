@@ -23,7 +23,8 @@ namespace User.API.Controllers
             _usersService = usersService;
         }
 
-        [Authorize(Policy = "Player")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "Player")]
         [HttpGet("token")]
         public async Task<IActionResult> CheckToken()
         {

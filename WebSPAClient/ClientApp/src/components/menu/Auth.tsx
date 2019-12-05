@@ -5,6 +5,7 @@ import * as AuthReducer from '../../store/menu/AuthReducer';
 import { ApplicationState } from '../../store';
 import { RouteComponentProps } from 'react-router';
 import ModalWindow from '../helpers/ModalWindow';
+import userManager from '../../UserManager';
 
 type AuthProps =
     AuthReducer.AuthState // ... state we've requested from the Redux store
@@ -33,12 +34,18 @@ class Auth extends Component<AuthProps, AuthState> {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.registerClicked = this.registerClicked.bind(this);
+        this.oauthLogin = this.oauthLogin.bind(this);
         this.alertClosed = this.alertClosed.bind(this)
     }
 
     registerClicked() {
         if (this.state.credentials.username.length != 0 && this.state.credentials.password.length > 3)
             this.props.requestReg(this.state.credentials.username, this.state.credentials.password);
+    }
+
+    oauthLogin() {
+        //userManager.signinRedirect();
+        this.props.requestOAuth();
     }
 
     alertClosed() {
@@ -86,6 +93,9 @@ class Auth extends Component<AuthProps, AuthState> {
                     <button type="submit" className="btn btn-primary mb-3">Sign In</button>
                     <button type="button" className="btn btn-primary mb-3 float-right" onClick={this.registerClicked}>
                         Register
+                    </button>
+                    <button type="button" className="btn btn-primary mb-3 ml-1 float-right" onClick={this.oauthLogin}>
+                        OAuth Login
                     </button>
                 </form>
             </BaseWindow>

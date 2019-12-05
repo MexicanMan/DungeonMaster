@@ -8,12 +8,14 @@ using Gateway.Services;
 using Gateway.Services.Clients;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 
 namespace Gateway
 {
@@ -48,13 +50,17 @@ namespace Gateway
                 client.DefaultRequestHeaders.Add("User-Agent", appSettingsSection.Get<AppSettings>().UserAgent);
             });
 
-            services.AddAuthentication(options =>
-            {
+            services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = MicroAuthOptions.DefaultScheme;
-                options.DefaultChallengeScheme = MicroAuthOptions.DefaultScheme;
-            }).AddMicroAuth(configureOptions =>
-            { 
-            });
+                options.DefaultChallengeScheme = MicroAuthOptions.DefaultScheme; 
+            })
+                .AddMicroAuth(options => { })
+                .AddIdentityServerAuthentication("Bearer", options =>
+                {
+                    options.Authority = "http://localhost:5010/";
+                    options.ApiName = "api1";
+                    options.RequireHttpsMetadata = false;
+                });
 
             services.AddAuthorization(options =>
             {
@@ -75,6 +81,7 @@ namespace Gateway
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             //app.UseHttpsRedirection();
@@ -88,6 +95,8 @@ namespace Gateway
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {

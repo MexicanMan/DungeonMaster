@@ -4,6 +4,13 @@ import * as Loader from './helpers/LoaderReducer';
 import * as Field from './game/FieldReducer';
 import * as Controller from './game/ControllerReducer';
 import * as Log from './game/LogReducer';
+import { reducer as oidcReducer } from 'redux-oidc';
+import { User } from 'oidc-client';
+
+interface OidcState {
+    isLoadingUser: boolean;
+    user: User;
+}
 
 // The top-level state object
 export interface ApplicationState {
@@ -13,6 +20,7 @@ export interface ApplicationState {
     controller: Controller.ControllerState | undefined;
     leaderboard: Leaderboard.LeaderboardState | undefined;
     log: Log.LogState | undefined;
+    oidc: OidcState;
 }
 
 // Whenever an action is dispatched, Redux will update each top-level application state property using
@@ -24,7 +32,8 @@ export const reducers = {
     field: Field.fieldReducer,
     controller: Controller.controllerReducer,
     leaderboard: Leaderboard.leaderboardReducer,
-    log: Log.logReducer
+    log: Log.logReducer,
+    oidc: oidcReducer
 };
 
 // This type can be used as a hint on action creators so that its 'dispatch' and 'getState' params are

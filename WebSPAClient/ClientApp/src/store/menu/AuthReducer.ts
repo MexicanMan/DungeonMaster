@@ -58,6 +58,7 @@ function setSessionItems(auth_token: string, id: string, username: string) {
     sessionStorage.setItem('auth_token', auth_token);
     sessionStorage.setItem('id', id);
     sessionStorage.setItem('username', username);
+    sessionStorage.setItem('scheme', "MicroAuth");
 }
 
 export const actionCreators = {
@@ -97,6 +98,12 @@ export const actionCreators = {
         .catch(error => {
             console.log(error);
         });
+    },
+
+    requestOAuth: (): AppThunkAction<any> => (dispatch) => {
+        dispatch(loaderActionCreators.request());
+
+        window.location.href = 'http://localhost:5010/connect/authorize?client_id=spa&scope=openid profile api1&response_type=code&redirect_uri=https://localhost:8081/oacallback';
     },
 
     requestReg: (username: string, pwd: string): AppThunkAction<any> => (dispatch) => {

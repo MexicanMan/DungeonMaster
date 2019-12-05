@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -32,9 +33,6 @@ namespace User.API
         {
             services.AddDbContext<UserContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddSingleton<IJwtFactory, JwtFactory>();
-            services.AddTransient<IUsersService, UsersService>();
-
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -45,6 +43,9 @@ namespace User.API
             })
                 .AddEntityFrameworkStores<UserContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddSingleton<IJwtFactory, JwtFactory>();
+            services.AddTransient<IUsersService, UsersService>();
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
@@ -76,17 +77,20 @@ namespace User.API
                 ClockSkew = TimeSpan.Zero
             };
 
-            services.AddAuthentication(options =>
+            services.ConfigureApplicationCookie(config =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(configureOptions =>
-            {
-                configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
-                configureOptions.TokenValidationParameters = tokenValidationParameters;
-                configureOptions.SaveToken = true;
-                configureOptions.RequireHttpsMetadata = false;
+                config.Cookie.Name = "IdentityServer.Cookie";
+                config.LoginPath = "/OAuth/Login";
             });
+
+            services.AddAuthentication()
+                .AddJwtBearer(configureOptions =>
+                {
+                    configureOptions.ClaimsIssuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
+                    configureOptions.TokenValidationParameters = tokenValidationParameters;
+                    configureOptions.SaveToken = true;
+                    configureOptions.RequireHttpsMetadata = false;
+                });
 
             // API user claim policy
             services.AddAuthorization(options =>
@@ -95,7 +99,20 @@ namespace User.API
                     ClaimConstants.JwtClaims.ApiAccess));
             });
 
-            services.AddControllers();
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
+                .AddJwtBearerClientAuthentication()
+                .AddInMemoryPersistedGrants()
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients())
+                .AddAspNetIdentity<ApplicationUser>()
+                .AddProfileService<ProfileService>();
+
+            //services.AddControllers();
+            services.AddCors();
+
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -110,8 +127,15 @@ namespace User.API
 
             app.UseHttpsRedirection();
 
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {

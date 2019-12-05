@@ -18,11 +18,11 @@ namespace User.API.Services
             ThrowIfInvalidOptions(_jwtOptions);
         }
 
-        public async Task<string> GenerateEncodedToken(string username, ClaimsIdentity identity)
+        public async Task<string> GenerateEncodedToken(string id, ClaimsIdentity identity)
         {
             var claims = new[]
          {
-                 new Claim(JwtRegisteredClaimNames.Sub, username),
+                 new Claim(JwtRegisteredClaimNames.Sub, id),
                  new Claim(JwtRegisteredClaimNames.Jti, await _jwtOptions.JtiGenerator()),
                  new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_jwtOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
                  identity.FindFirst(ClaimConstants.JwtClaimIdentifiers.Rol),

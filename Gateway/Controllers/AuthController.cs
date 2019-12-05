@@ -47,6 +47,14 @@ namespace Gateway.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Test()
+        {
+
+
+            return Ok();
+        }
+
         [HttpPost("reg")]
         public async Task<IActionResult> Register([FromBody] Login data)
         {
