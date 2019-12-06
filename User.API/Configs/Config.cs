@@ -40,7 +40,7 @@ namespace User.API.Configs
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = false,
                     //AuthorizationCodeLifetime = 300,
-                    //AccessTokenLifetime = 3600,
+                    AccessTokenLifetime = 60,
                    
                     RedirectUris = {
                         "https://localhost:8081/oacallback",

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var actionTypes_1 = require("../actionTypes");
 var connected_react_router_1 = require("connected-react-router");
 var Path = require("../../routes/routes");
+var AuthReducer_1 = require("../menu/AuthReducer");
 exports.actionCreators = {
     request: function () { return ({ type: actionTypes_1.REQUEST }); },
     response: function () { return ({ type: actionTypes_1.REQUEST_RESPONSE }); },
@@ -36,9 +37,12 @@ exports.actionCreators = {
             .then(function (data) {
             console.log(data);
             sessionStorage.setItem('auth_token', data.access_token);
+            sessionStorage.setItem('refresh_token', data.refresh_token);
             sessionStorage.setItem('expires_in', data.expires_in.toString());
             sessionStorage.setItem('scheme', "Bearer");
-            sessionStorage.setItem('username', "player");
+            sessionStorage.setItem('username', "a");
+            var timeout = (data.expires_in - 10) * 1000;
+            setTimeout(function () { AuthReducer_1.actionCreators.refreshOAuth(); }, timeout);
             dispatch(exports.actionCreators.response());
             dispatch(exports.actionCreators.moveToMainMenu());
         })

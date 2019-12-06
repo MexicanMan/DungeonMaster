@@ -60,6 +60,7 @@ namespace Gateway
                     options.Authority = "http://localhost:5010/";
                     options.ApiName = "api1";
                     options.RequireHttpsMetadata = false;
+                    options.JwtValidationClockSkew = TimeSpan.Zero;
                 });
 
             services.AddAuthorization(options =>

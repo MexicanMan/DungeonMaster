@@ -3,6 +3,7 @@ import { AppThunkAction } from '../';
 import { REQUEST, REQUEST_RESPONSE } from '../actionTypes';
 import { push } from 'connected-react-router';
 import * as Path from '../../routes/routes';
+import { actionCreators as authActionCreators } from '../menu/AuthReducer';
 
 // -----------------
 // STATE - This defines the type of data maintained in the Redux store.
@@ -33,6 +34,7 @@ type KnownAction = RequestAction | ResponseAction;
 
 interface OAuthResponse {
     access_token: string;
+    refresh_token: string;
     expires_in: number;
 }
 
@@ -73,9 +75,13 @@ export const actionCreators = {
             .then(data => {
                 console.log(data);
                 sessionStorage.setItem('auth_token', data.access_token);
+                sessionStorage.setItem('refresh_token', data.refresh_token);
                 sessionStorage.setItem('expires_in', data.expires_in.toString());
                 sessionStorage.setItem('scheme', "Bearer");
-                sessionStorage.setItem('username', "player");
+                sessionStorage.setItem('username', "a");
+                
+                let timeout = (data.expires_in - 10) * 1000;
+                setTimeout(function() { authActionCreators.refreshOAuth(); }, timeout);
 
                 dispatch(actionCreators.response());
                 dispatch(actionCreators.moveToMainMenu());
