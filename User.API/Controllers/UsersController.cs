@@ -31,6 +31,18 @@ namespace User.API.Controllers
             return Ok("Token correct!");
         }
 
+        [HttpPost("authserver")]
+        public async Task<IActionResult> AuthUser([FromBody] AuthUserModel auth)
+        {
+            if (auth.AppId == 1 && auth.AppSecret == "user_secret")
+            {
+                //var token = ;
+                return Ok();
+            }
+            else
+                return StatusCode(StatusCodes.Status401Unauthorized);
+        }
+
         [HttpPost("auth")]
         public async Task<IActionResult> Authenticate([FromBody] Login data)
         {
