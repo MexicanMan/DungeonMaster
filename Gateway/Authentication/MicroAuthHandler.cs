@@ -32,18 +32,24 @@ namespace Gateway.Authentication
                 return Task.FromResult(AuthenticateResult.Fail("Cannot read authorization header!"));
             }
 
+            if (!authorization.ToString().StartsWith("MicroAuth "))
+            {
+                return Task.FromResult(AuthenticateResult.NoResult());
+            }
+
+            // To delete scheme
+            string token = authorization.ToString().Substring(10);
+
             // The auth key from Authorization header check against the configured ones
-            if (!_usersClient.GetTokenCorrectness(authorization).Result)
+            if (!_usersClient.GetTokenCorrectness(token).Result)
             {
                 return Task.FromResult(AuthenticateResult.Fail("Invalid token!"));
             }
 
-            // To delete scheme
-            string token = authorization.ToString().Substring(7);
             var jwtClaims = new JwtSecurityTokenHandler().ReadJwtToken(token).Claims;
 
             // Create authenticated user
-            var claims = new[] { new Claim("Player", "Player"), jwtClaims.First(c => c.Type == "id") };
+            var claims = new[] { new Claim("Player", "Player"), jwtClaims.First(c => c.Type == "sub") };
             var identities = new[] { new ClaimsIdentity(claims) };
             var ticket = new AuthenticationTicket(new ClaimsPrincipal(identities), Options.Scheme);
 

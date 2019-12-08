@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Monster.API.Authentication;
 using Monster.API.Configs;
 using Monster.API.Models;
 using Monster.API.Services;
@@ -37,6 +38,13 @@ namespace Monster.API
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
+            services.AddSingleton(new TokenStorage());
+
+            services.AddAuthentication("MonsterAuth").AddMonsterAuth(options => { });
+            services.AddAuthorization(options => {
+                options.AddPolicy("Gateway", policy => policy.RequireClaim("Gateway"));
+            });
+
             services.AddTransient<IMonstersService, MonstersService>();
         }
 
@@ -48,10 +56,11 @@ namespace Monster.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -18,6 +18,9 @@ export const actionCreators = {
     exit: () => (dispatch: Dispatch) => {
         sessionStorage.removeItem("id");
         sessionStorage.removeItem("auth_token");
+        sessionStorage.removeItem("refresh_token");
+        sessionStorage.removeItem("expires_in");
+        sessionStorage.removeItem("scheme");
         sessionStorage.removeItem("username");
 
         dispatch(push("/"));

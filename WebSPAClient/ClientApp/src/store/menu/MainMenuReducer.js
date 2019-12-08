@@ -12,6 +12,9 @@ exports.actionCreators = {
     exit: function () { return function (dispatch) {
         sessionStorage.removeItem("id");
         sessionStorage.removeItem("auth_token");
+        sessionStorage.removeItem("refresh_token");
+        sessionStorage.removeItem("expires_in");
+        sessionStorage.removeItem("scheme");
         sessionStorage.removeItem("username");
         dispatch(connected_react_router_1.push("/"));
     }; },

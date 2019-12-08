@@ -9,6 +9,7 @@ function setSessionItems(auth_token, id, username) {
     sessionStorage.setItem('auth_token', auth_token);
     sessionStorage.setItem('id', id);
     sessionStorage.setItem('username', username);
+    sessionStorage.setItem('scheme', "MicroAuth");
 }
 exports.actionCreators = {
     requestAuth: function (username, pwd) { return function (dispatch) {
@@ -46,6 +47,11 @@ exports.actionCreators = {
             console.log(error);
         });
     }; },
+    requestOAuth: function () { return function (dispatch) {
+        dispatch(LoaderReducer_1.actionCreators.request());
+        window.location.href = 'http://localhost:5010/connect/authorize?client_id=spa&scope=openid profile api1 offline_access&response_type=code&redirect_uri=https://localhost:8081/oacallback';
+        dispatch(LoaderReducer_1.actionCreators.response());
+    }; },
     requestReg: function (username, pwd) { return function (dispatch) {
         dispatch(LoaderReducer_1.actionCreators.request());
         fetch(appconfig_1.GATEWAY_ADDR + "/api/auth/reg/", {
@@ -80,6 +86,45 @@ exports.actionCreators = {
             console.log(error);
         });
     }; },
+    refreshOAuth: function () {
+        var refresh_token = sessionStorage.getItem('refresh_token') != null ? sessionStorage.getItem('refresh_token') : "";
+        var details = {
+            'client_id': 'spa',
+            'client_secret': 'secret',
+            'grant_type': 'refresh_token',
+            'refresh_token': refresh_token,
+            'redirect_uri': 'https://localhost:8081/oacallback'
+        };
+        var formBody = [];
+        for (var property in details) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(details[property]);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
+        var formBodyString = formBody.join("&");
+        fetch("http://localhost:5010/connect/token", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formBodyString
+        })
+            .then(function (response) {
+            return response.json();
+        })
+            .then(function (data) {
+            sessionStorage.setItem('auth_token', data.access_token);
+            sessionStorage.setItem('refresh_token', data.refresh_token);
+            sessionStorage.setItem('expires_in', data.expires_in.toString());
+            sessionStorage.setItem('scheme', "Bearer");
+            sessionStorage.setItem('username', "a");
+            setTimeout(function () { exports.actionCreators.refreshOAuth(); }, (data.expires_in - 10) * 1000);
+        })
+            .catch(function (error) {
+            console.log(error);
+        });
+    },
     moveToMainMenu: function () { return function (dispatch) { dispatch(connected_react_router_1.push(Path.MAIN_MENU)); }; },
     authFailed: function (error) { return ({ type: actionTypes_1.AUTH_FAILED, error: error }); },
     authCleanError: function () { return ({ type: actionTypes_1.AUTH_ERROR_CLEAN }); },

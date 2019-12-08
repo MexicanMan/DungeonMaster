@@ -15,7 +15,7 @@ namespace User.API.Services
             var response = new AuthResponse()
             {
                 Id = identity.Claims.Single(c => c.Type == "id").Value,
-                Auth_token = await jwtFactory.GenerateEncodedToken(userName, identity),
+                Auth_token = await jwtFactory.GenerateEncodedToken(identity.Claims.Single(c => c.Type == "id").Value, identity),
                 Expires_in = (int) jwtOptions.ValidFor.TotalSeconds
             };
 

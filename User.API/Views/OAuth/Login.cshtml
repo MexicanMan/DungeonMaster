@@ -1,0 +1,17 @@
+﻿@model User.API.ViewModels.LoginViewModel
+
+<h2>USER SERVICE OAUTH2</h2>
+<form asp-controller="OAuth" asp-action="Login" method="post">
+    <input type="hidden" asp-for="ReturnUrl" />
+    <div>
+        <label>Username</label>
+        <input asp-for="Username" />
+    </div>
+    <div>
+        <label>Password</label>
+        <input type="password" asp-for="Password" />
+    </div>
+    <div>
+        <button type="submit">Sign In</button>
+    </div>
+</form> 

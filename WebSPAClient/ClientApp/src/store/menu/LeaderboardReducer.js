@@ -13,7 +13,7 @@ exports.actionCreators = {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
-                'Authorization': "Bearer " + sessionStorage.getItem("auth_token")
+                'Authorization': sessionStorage.getItem("scheme") + " " + sessionStorage.getItem("auth_token")
             }
         })
             .then(function (response) {

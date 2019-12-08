@@ -22,6 +22,18 @@ namespace Room.API.Controllers
             _roomsService = roomsService ?? throw new ArgumentNullException(nameof(roomsService));
         }
 
+        [HttpPost("auth")]
+        public async Task<IActionResult> AuthRoom([FromBody] AuthRoomModel auth)
+        {
+            if (auth.AppId == 3 && auth.AppSecret == "room_secret")
+            {
+                //var token = ;
+                return Ok();
+            }
+            else
+                return StatusCode(StatusCodes.Status401Unauthorized);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateRoom([FromBody] Discoverer body)
         {

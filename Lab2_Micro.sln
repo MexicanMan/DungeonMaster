@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monster.Test", "Monster.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Room.Test", "Room.Test\Room.Test.csproj", "{B9C1CB9F-E71B-47CF-9F48-406140EFB720}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSPAClient", "WebSPAClient\WebSPAClient.csproj", "{A7BBD7DA-EB2A-476C-A196-93D8FAB380D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebSPAClient", "WebSPAClient\WebSPAClient.csproj", "{A7BBD7DA-EB2A-476C-A196-93D8FAB380D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -16,6 +16,8 @@ import PrivateRoute from './routes/PrivateRoute';
 import PublicRoute from './routes/PublicRoute';
 import Game from './components/game/Game';
 import Leaderboard from './components/menu/Leaderboard';
+import Loader from './components/helpers/Loader';
+import OAuthCallback from './components/menu/OAuthCallback';
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
@@ -30,6 +32,7 @@ ReactDOM.render(
             <Switch>
                 <PublicRoute exact path="/" component={App} />
                 <PublicRoute path={Path.AUTH} component={Auth} />
+                <PublicRoute path="/oacallback" component={OAuthCallback} />
                 <PrivateRoute path={Path.MAIN_MENU} component={MainMenu} />
                 <PrivateRoute path={Path.GAME} component={Game} />
                 <PrivateRoute path={Path.LEADERBOARD} component={Leaderboard} />

@@ -10,6 +10,7 @@ using Gateway.Services.Clients;
 using Gateway.Storage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Extensions.Http;
+using Microsoft.IdentityModel.Logging;
 
 namespace Gateway
 {
@@ -58,13 +60,18 @@ namespace Gateway
             .AddPolicyHandler(GetRetryPolicy())
             .AddPolicyHandler(GetCircuitBreakerPolicy());
 
-            services.AddAuthentication(options =>
-            {
+            services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = MicroAuthOptions.DefaultScheme;
-                options.DefaultChallengeScheme = MicroAuthOptions.DefaultScheme;
-            }).AddMicroAuth(configureOptions =>
-            { 
-            });
+                options.DefaultChallengeScheme = MicroAuthOptions.DefaultScheme; 
+            })
+                .AddMicroAuth(options => { })
+                .AddIdentityServerAuthentication("Bearer", options =>
+                {
+                    options.Authority = "http://localhost:5010/";
+                    options.ApiName = "api1";
+                    options.RequireHttpsMetadata = false;
+                    options.JwtValidationClockSkew = TimeSpan.Zero;
+                });
 
             services.AddAuthorization(options =>
             {
@@ -80,6 +87,7 @@ namespace Gateway
 
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IAuthService, AuthService>();
+            services.AddSingleton<ServicesAuth>();
 
             services.AddTransient<ILab4Service, Lab4Service>();
         }
@@ -90,6 +98,7 @@ namespace Gateway
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                IdentityModelEventSource.ShowPII = true;
             }
 
             //app.UseHttpsRedirection();
@@ -103,6 +112,8 @@ namespace Gateway
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            //app.UseIdentityServer();
 
             app.UseEndpoints(endpoints =>
             {

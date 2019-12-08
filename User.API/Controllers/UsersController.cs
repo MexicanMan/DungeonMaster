@@ -23,11 +23,24 @@ namespace User.API.Controllers
             _usersService = usersService;
         }
 
-        [Authorize(Policy = "Player")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme,
+            Policy = "Player")]
         [HttpGet("token")]
         public async Task<IActionResult> CheckToken()
         {
             return Ok("Token correct!");
+        }
+
+        [HttpPost("authserver")]
+        public async Task<IActionResult> AuthUser([FromBody] AuthUserModel auth)
+        {
+            if (auth.AppId == 1 && auth.AppSecret == "user_secret")
+            {
+                //var token = ;
+                return Ok();
+            }
+            else
+                return StatusCode(StatusCodes.Status401Unauthorized);
         }
 
         [HttpPost("auth")]

@@ -54,10 +54,17 @@ interface AuthResponse {
     expires_in: number;
 }
 
+interface OAuthResponse {
+    access_token: string;
+    refresh_token: string;
+    expires_in: number;
+}
+
 function setSessionItems(auth_token: string, id: string, username: string) {
     sessionStorage.setItem('auth_token', auth_token);
     sessionStorage.setItem('id', id);
     sessionStorage.setItem('username', username);
+    sessionStorage.setItem('scheme', "MicroAuth");
 }
 
 export const actionCreators = {
@@ -99,6 +106,14 @@ export const actionCreators = {
         });
     },
 
+    requestOAuth: (): AppThunkAction<any> => (dispatch) => {
+        dispatch(loaderActionCreators.request());
+
+        window.location.href = 'http://localhost:5010/connect/authorize?client_id=spa&scope=openid profile api1 offline_access&response_type=code&redirect_uri=https://localhost:8081/oacallback';
+
+        dispatch(loaderActionCreators.response());
+    },
+
     requestReg: (username: string, pwd: string): AppThunkAction<any> => (dispatch) => {
         dispatch(loaderActionCreators.request());
 
@@ -134,6 +149,50 @@ export const actionCreators = {
         .catch(error => {
             console.log(error);
         });
+    },
+
+    refreshOAuth: () => {
+        let refresh_token : string = sessionStorage.getItem('refresh_token') != null ? sessionStorage.getItem('refresh_token')! : "";
+
+        var details: { [key: string]: string } = {
+            'client_id': 'spa',
+            'client_secret': 'secret',
+            'grant_type': 'refresh_token',
+            'refresh_token': refresh_token,
+            'redirect_uri': 'https://localhost:8081/oacallback'
+        };
+
+        var formBody = [];
+        for (var property in details) {
+            var encodedKey = encodeURIComponent(property);
+            var encodedValue = encodeURIComponent(details[property] as string);
+            formBody.push(encodedKey + "=" + encodedValue);
+        }
+        var formBodyString = formBody.join("&");
+
+        fetch(`http://localhost:5010/connect/token`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: formBodyString
+        })
+            .then(response => {
+                return response.json() as Promise<OAuthResponse>;
+            })
+            .then(data => {
+                sessionStorage.setItem('auth_token', data.access_token);
+                sessionStorage.setItem('refresh_token', data.refresh_token);
+                sessionStorage.setItem('expires_in', data.expires_in.toString());
+                sessionStorage.setItem('scheme', "Bearer");
+                sessionStorage.setItem('username', "a");
+
+                setTimeout(function() { actionCreators.refreshOAuth(); }, (data.expires_in-10) * 1000);
+            })
+            .catch((error: any) => {
+                console.log(error);
+            });
     },
 
     moveToMainMenu: () => (dispatch: Dispatch) => { dispatch(push(Path.MAIN_MENU)); },
