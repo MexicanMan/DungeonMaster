@@ -18,7 +18,7 @@ namespace User.Test
         public UsersControllerTests()
         {
             var usersServiceMock = new Mock<IUsersService>();
-            usersServiceMock.Setup(x => x.Auth(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync("token");
+            usersServiceMock.Setup(x => x.Auth(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new AuthResponse());
             usersServiceMock.Setup(x => x.RegisterUser(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((string x, string y) => 
             new ApplicationUser() {
                 UserName = x,

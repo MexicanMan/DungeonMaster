@@ -39,7 +39,7 @@ namespace User.Test
         public async void GenerateJwtTest()
         {
             var claims = new ClaimsIdentity(new[] { new Claim("id", "1") });
-            string jwt = await JwtGenerator.GenerateJwt(claims, jwtFactory, "admin", jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
+            var jwt = await JwtGenerator.GenerateJwt(claims, jwtFactory, "admin", jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
 
             Assert.NotNull(jwt);
         }
