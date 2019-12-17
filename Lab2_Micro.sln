@@ -3,25 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Room.API", "Room.API\Room.API.csproj", "{8B8858D8-F511-4DF7-B6AC-99E5F8AD55A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Room.API", "src\Room.API\Room.API.csproj", "{8B8858D8-F511-4DF7-B6AC-99E5F8AD55A9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.API", "User.API\User.API.csproj", "{4B823648-4E16-4544-93A6-7840C1B72A5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.API", "src\User.API\User.API.csproj", "{4B823648-4E16-4544-93A6-7840C1B72A5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monster.API", "Monster.API\Monster.API.csproj", "{FFDF9622-67E2-4C92-808D-814E48713DDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monster.API", "src\Monster.API\Monster.API.csproj", "{FFDF9622-67E2-4C92-808D-814E48713DDA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway", "Gateway\Gateway.csproj", "{D3CB591F-A103-4853-8033-8634DF6D4960}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Gateway", "src\Gateway\Gateway.csproj", "{D3CB591F-A103-4853-8033-8634DF6D4960}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{6552C5D0-0279-41F4-BF58-C2D845851135}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{2DCBD74C-A7DA-4B73-A5CF-BDEDF49FE1CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Test", "User.Test\User.Test.csproj", "{F2769340-EDD8-4557-BA85-113C859F9DA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "User.Test", "tests\User.Test\User.Test.csproj", "{F2769340-EDD8-4557-BA85-113C859F9DA6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monster.Test", "Monster.Test\Monster.Test.csproj", "{0E672B11-3A54-4429-885C-FC7285A9FB1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monster.Test", "tests\Monster.Test\Monster.Test.csproj", "{0E672B11-3A54-4429-885C-FC7285A9FB1E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Room.Test", "Room.Test\Room.Test.csproj", "{B9C1CB9F-E71B-47CF-9F48-406140EFB720}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Room.Test", "tests\Room.Test\Room.Test.csproj", "{B9C1CB9F-E71B-47CF-9F48-406140EFB720}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSPAClient", "WebSPAClient\WebSPAClient.csproj", "{A7BBD7DA-EB2A-476C-A196-93D8FAB380D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebSPAClient", "src\WebSPAClient\WebSPAClient.csproj", "{A7BBD7DA-EB2A-476C-A196-93D8FAB380D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

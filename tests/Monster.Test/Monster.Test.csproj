@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Monster.API\Monster.API.csproj" />
+    <ProjectReference Include="..\..\src\Monster.API\Monster.API.csproj" />
   </ItemGroup>
 
 </Project>
