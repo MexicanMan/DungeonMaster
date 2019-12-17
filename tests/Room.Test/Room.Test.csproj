@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Room.API\Room.API.csproj" />
+    <ProjectReference Include="..\..\src\Room.API\Room.API.csproj" />
   </ItemGroup>
 
 </Project>

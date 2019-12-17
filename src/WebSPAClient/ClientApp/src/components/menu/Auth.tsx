@@ -37,8 +37,9 @@ class Auth extends Component<AuthProps, AuthState> {
     }
 
     registerClicked() {
-        if (this.state.credentials.username.length != 0 && this.state.credentials.password.length > 3)
+        if (this.state.credentials.username.length != 0 && this.state.credentials.password.length >= 3) {
             this.props.requestReg(this.state.credentials.username, this.state.credentials.password);
+        }
     }
 
     alertClosed() {
